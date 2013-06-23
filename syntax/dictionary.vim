@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/23 18:16:03.
+" Last Change: 2013/06/23 18:44:23.
 " =============================================================================
 
 if version < 700
@@ -21,7 +21,7 @@ syntax region DictionaryPronounce start='^|' end='|\s*$'
       \ keepend containedin=Dictionary,DictionaryName contained oneline
 syntax region DictionaryPronounce start='^/' end='/\s*$'
       \ keepend containedin=Dictionary,DictionaryName contained oneline
-syntax region DictionaryPronounceNoHead start='/' end='/\s*$'
+syntax match DictionaryPronounceNoHead '/.\{-}/'
       \ keepend containedin=Dictionary,DictionaryName contained oneline
 syntax match DictionaryName '^\S\+\s*\n|.*|\s*$'
       \ containedin=Dictionary contained contains=DictionaryPronounce
@@ -36,8 +36,11 @@ syntax match DictionaryGrammer '^\(名詞\|形容詞\|[自他]\?動詞\|副詞\)
 syntax match DictionaryName '^\S\+\s*\n^\(noun\|adjective\|verb\|adverb\)'
       \ containedin=Dictionary contained contains=DictionaryGrammer
 syntax match DictionaryName '^\(～\|～́\|～̀\).*'
-      \ containedin=Dictionary contained contains=DictionaryGrammer
+      \ containedin=Dictionary contained
+      \ contains=DictionaryGrammer,DictionaryPronounceNoHead,DictionarySemicolon,DictionaryComment 
 syntax match DictionaryComment '^DERIVATIVES\|｟.\{-}｠\|〖.\{-}〗\|〘.\{-}〙'
+      \ containedin=Dictionary contained
+syntax match DictionarySemicolon ';'
       \ containedin=Dictionary contained
 
 highlight default link DictionaryName Identifier
@@ -47,6 +50,7 @@ highlight default link DictionaryPronounceNoHead DictionaryPronounce
 highlight default link DictionaryGroup String
 highlight default link DictionaryGrammer Type
 highlight default link DictionaryComment Comment
+highlight default link DictionarySemicolon Normal
 
 let b:current_syntax = 'dictionary'
 
