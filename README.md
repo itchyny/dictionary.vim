@@ -9,7 +9,9 @@
 ![dictionary.vim](https://raw.github.com/itchyny/dictionary.vim/master/image/image4.png)
 
 ## Requirement
-vimproc (https://github.com/Shougo/vimproc.vim)
++ Dictionary.app
++ `gcc` or `llvm-gcc`
++ vimproc (https://github.com/Shougo/vimproc.vim)
 
 ## Author
 itchyny (https://github.com/itchyny)
