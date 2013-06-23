@@ -11,6 +11,7 @@ int main(int argc, char *argv[]) {
                                            CFRangeMake(0, [word length]));
   result = substitute(result, @"\n(\n", @"(");
   result = substitute(result, @"\n) \n", @") ");
+  result = substitute(result, @"\n;\n", @";");
   result = substitute(result, @"\n; \n", @"; ");
   result = substitute(result, @"\n.\n", @".\n");
   result = substitute(result, @"\n. \n", @".\n");
