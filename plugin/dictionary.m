@@ -21,6 +21,8 @@ int main(int argc, char *argv[]) {
   result = substitute(result, @"\n/", @"/");
   result = substitute(result, @"\n｟\n", @"｟");
   result = substitute(result, @"\n｠", @"｠");
+  result = substitute(result, @"\n（\n", @"（");
+  result = substitute(result, @"\n）", @"）");
   if (result != nil) puts([result UTF8String]);
   return 0;
 }
