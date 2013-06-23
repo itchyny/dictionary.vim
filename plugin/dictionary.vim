@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/23 18:28:56.
+" Last Change: 2013/06/23 18:33:55.
 " =============================================================================
 
 if !(has('mac') || has('macunix') || has('guimacvim'))
@@ -42,7 +42,7 @@ function! s:new(...)
   augroup END
   setlocal buftype=nofile noswapfile wrap
         \ bufhidden=hide nobuflisted nofoldenable foldcolumn=0
-        \ nolist nowrap concealcursor=nvic completefunc= omnifunc=
+        \ nolist wrap concealcursor=nvic completefunc= omnifunc=
         \ filetype=dictionary
 endfunction
 
