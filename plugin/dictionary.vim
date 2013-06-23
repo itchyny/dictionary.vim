@@ -3,14 +3,10 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/23 18:21:54.
+" Last Change: 2013/06/23 18:28:56.
 " =============================================================================
 
 if !(has('mac') || has('macunix') || has('guimacvim'))
-  finish
-endif
-
-if exists('*vimproc#system')
   finish
 endif
 
