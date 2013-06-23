@@ -1,0 +1,36 @@
+*dictionary.txt*	Dictionary.app interface for Vim
+
+Version: 0.0
+Author: itchyny (https://github.com/itchyny)
+License: MIT License
+Repository: https://github.com/itchyny/dictionary.vim
+Last Change: 2013/06/23 18:23:06.
+
+CONTENTS					*dictionary-contents*
+
+Introduction				|dictionary-introduction|
+Commands				|dictionary-commands|
+Syntax					|dictionary-syntax|
+Troubleshooting				|dictionary-troubleshooting|
+Changelog				|dictionary-changelog|
+
+==============================================================================
+INTRODUCTION					*dictionary-introduction*
+
+The *dictionary* plugin provides an interface for Dictionary.app in vim.
+
+------------------------------------------------------------------------------
+COMMANDS					*dictionary-commands*
+
+:Dictionary [{options}]
+						*:Dictionary*
+		Open a new buffer and start searching in Dictionary.app.
+
+==============================================================================
+CHANGELOG					*dictionary-changelog*
+
+0.0	2013-06-23
+	- Initial commit and implementation
+
+==============================================================================
+vim:tw=78:sw=4:ts=8:ft=help:norl:noet:
