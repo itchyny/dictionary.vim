@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/23 18:33:55.
+" Last Change: 2013/06/24 20:02:05.
 " =============================================================================
 
 if !(has('mac') || has('macunix') || has('guimacvim'))
@@ -51,8 +51,11 @@ function! s:update()
   let word = getline(1)
   if exists('b:proc')
     call s:check()
-    call b:proc.kill(15)
-    call b:proc.waitpid()
+    try
+      call b:proc.kill(15)
+      call b:proc.waitpid()
+    catch
+    endtry
   endif
   let b:proc = vimproc#pgroup_open(printf('%s "%s"', s:exe, word))
   call b:proc.stdin.close()
