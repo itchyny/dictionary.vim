@@ -17,6 +17,7 @@ int main(int argc, char *argv[]) {
   result = substitute(result, @"\n. \n", @".\n");
   result = substitute(result, @"\n,\n", @",");
   result = substitute(result, @"\n, \n", @",");
+  result = substitute(result, @"\n, ", @", ");
   result = substitute(result, @"\n• ", @"");
   result = substitute(result, @"\n/", @"/");
   result = substitute(result, @"\n｟\n", @"｟");
