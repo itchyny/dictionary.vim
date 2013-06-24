@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#include <CoreServices/CoreServices.h>
+#import <CoreServices/CoreServices.h>
 
 #define substitute(s,x,y)\
   [s stringByReplacingOccurrencesOfString:x withString:y]
