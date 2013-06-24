@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/24 20:02:05.
+" Last Change: 2013/06/24 21:02:22.
 " =============================================================================
 
 if !(has('mac') || has('macunix') || has('guimacvim'))
@@ -44,6 +44,7 @@ function! s:new(...)
         \ bufhidden=hide nobuflisted nofoldenable foldcolumn=0
         \ nolist wrap concealcursor=nvic completefunc= omnifunc=
         \ filetype=dictionary
+  let b:input = ''
 endfunction
 
 function! s:update()
@@ -72,6 +73,11 @@ function! s:check()
   endif
   let result = split(b:proc.stdout.read(), "\n")
   let word = getline(1)
+  let newword = substitute(word, ' $', '', '')
+  if len(result) == 0 && b:input ==# newword && newword !=# ''
+    return
+  endif
+  let b:input = newword
   let curpos = getpos('.')
   silent % delete _
   call setline(1, word)
