@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/23 21:04:25.
+" Last Change: 2013/06/24 13:18:26.
 " =============================================================================
 
 if version < 700
@@ -32,7 +32,7 @@ syntax match DictionaryGrammer '^\(名詞\|形容詞\|[自他]\?動詞\|副詞\|
       \ containedin=DictionaryName
 syntax match DictionaryName '^\S\+\s*\n^\(noun\|adjective\|verb\|adverb\)'
       \ contains=DictionaryGrammer
-syntax match DictionaryName '^\(～\|～́\|～̀\).*'
+syntax match DictionaryName '^\(-\a\|～\|～́\|～̀\).*'
       \ contains=DictionaryGrammer,DictionaryPronounceNoHead,DictionarySemicolon,DictionaryComment 
 syntax match DictionaryComment '^DERIVATIVES\|｟.\{-}｠\|〖.\{-}〗\|〘.\{-}〙'
 syntax match DictionarySemicolon ';'
