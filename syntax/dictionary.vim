@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/25 20:03:28.
+" Last Change: 2013/06/25 20:06:31.
 " =============================================================================
 
 if version < 700
@@ -20,7 +20,7 @@ syntax region DictionaryPronounce start='^|' end='|\s*$'
 syntax region DictionaryPronounce start='^/' end='/;\?\s*$'
       \ keepend containedin=DictionaryName oneline
 syntax match DictionaryPronounceNoHead '/.\{-}/;\?'
-      \ keepend containedin=DictionaryName contained oneline
+      \ keepend containedin=DictionaryName,DictionaryGrammerLine contained oneline
 syntax match DictionaryName '^\S\+\s*\n|.*|\s*$'
       \ contains=DictionaryPronounce
 syntax match DictionaryName '^\S\+\s*\n/.*/;\?'
