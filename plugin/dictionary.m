@@ -3,14 +3,11 @@
  * Version: 0.0
  * Author: itchyny
  * License: MIT License
- * Last Change: 2013/06/25 13:29:31.
+ * Last Change: 2013/06/25 13:31:42.
  * ========================================================================= */
 
 #import <Foundation/Foundation.h>
 #import <CoreServices/CoreServices.h>
-
-#define substitute(s,x,y)\
-  [s stringByReplacingOccurrencesOfString:x withString:y]
 
 #define eq3(x,y)\
   (*((x)+i+1)==y[0] && *((x)+i+2)==y[1] && *((x)+i+3)==y[2])
