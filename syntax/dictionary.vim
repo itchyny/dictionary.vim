@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/25 20:06:31.
+" Last Change: 2013/06/25 22:41:18.
 " =============================================================================
 
 if version < 700
@@ -36,7 +36,7 @@ syntax match DictionaryGrammerNoHead '\(代\?名　\?詞\|形容詞\|[自他助]
       \ containedin=DictionaryGrammerLine contained
 syntax match DictionaryGrammer '^\(代\?名　\?詞\|形容詞\|[自他助]\?動　\?詞\|副　\?詞\|前置詞\)'
       \ containedin=DictionaryName
-syntax match DictionaryGrammer '^\(名\(　\?詞\)\?\|形\(容詞\)\?\|[自他助]\?動　\?詞\|副\(　\?詞\)\?\|前\(置詞\)\?\|代\(名詞\)\?\|U\|C\)$'
+syntax match DictionaryGrammer '^\(名\(　\?詞\)\?\|形\(容詞\)\?\|[自他助]\?動　\?詞\|副\(　\?詞\)\?\|前\(置詞\)\?\|代\(名詞\)\?\|接尾辞\|U\|C\)$'
       \ containedin=DictionaryName
 syntax match DictionaryGrammerLine '^\(代\?名　\?詞\|形容詞\|[自他助]\?動　\?詞\|副　\?詞\|前置詞\).*'
       \ containedin=DictionaryName
