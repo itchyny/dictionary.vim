@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/25 18:30:03.
+" Last Change: 2013/06/25 18:56:17.
 " =============================================================================
 
 if version < 700
@@ -32,9 +32,9 @@ syntax match DictionaryGrammer '^\(nombre\|adjetivo\|adverbio\|adeverbio\|pronom
       \ containedin=DictionaryName
 syntax match DictionaryGrammer '^\(Substantiv\|Adjektiv\|Adverb\|Suffix\|Präposition\|Zahlwort\|Interjektion\|Präfix\|Pronomen\|Artikel\|Abkürzung\|\S\+ Verb\|Konjunktion\|Eigenname\)\>.*$'
       \ containedin=DictionaryName
-syntax match DictionaryGrammer '^\(名\(　\?詞\)\?\|形\(容詞\)\?\|[自他助]\?動　\?詞\|副\(　\?詞\)\?\|前\(置詞\)\?\|U\|C\)$'
+syntax match DictionaryGrammer '^\(名\(　\?詞\)\?\|形\(容詞\)\?\|[自他助]\?動　\?詞\|副\(　\?詞\)\?\|前\(置詞\)\?\|代\(名詞\)\?\|U\|C\)$'
       \ containedin=DictionaryName
-syntax match DictionaryGrammer '^\(动\|介\|量\|数\|连\|代\)$'
+syntax match DictionaryGrammer '^\(动\|介\|量\|数\|连\)$'
       \ containedin=DictionaryName
 syntax match DictionaryName '^\S\+\s*\n^\(noun\|adjective\|verb\|adverb\)\>'
       \ contains=DictionaryGrammer
