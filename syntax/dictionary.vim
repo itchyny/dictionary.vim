@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/26 00:48:03.
+" Last Change: 2013/06/26 01:16:43.
 " =============================================================================
 
 if version < 700
@@ -32,13 +32,13 @@ syntax match DictionaryGrammer '^\(nombre\|adjetivo\|adverbio\|adeverbio\|pronom
       \ containedin=DictionaryName
 syntax match DictionaryGrammer '^\(Substantiv\|Adjektiv\|Adverb\|Suffix\|Präposition\|Zahlwort\|Interjektion\|Präfix\|Pronomen\|Artikel\|Abkürzung\|\S\+ Verb\|Konjunktion\|Eigenname\)\>.*$'
       \ containedin=DictionaryName
-syntax match DictionaryGrammerNoHead '\(代\?名　\?詞\|形容詞\|[自他助]\?動　\?詞\|副　\?詞\|前置詞\|接[尾頭]辞\|間投詞\|冠詞\)'
+syntax match DictionaryGrammerNoHead '\(代\?名　\?詞\|形容詞\|[自他助]\?動　\?詞\|副　\?詞\|前置詞\|接[尾頭]辞\|間投詞\|冠　\?詞\|接続詞\)'
       \ containedin=DictionaryGrammerLine contained
-syntax match DictionaryGrammer '^\(代\?名　\?詞\|形容詞\|[自他助]\?動　\?詞\|副　\?詞\|前置詞\|接[尾頭]辞\|間投詞\|冠詞\)'
+syntax match DictionaryGrammer '^\(代\?名　\?詞\|形容詞\|[自他助]\?動　\?詞\|副　\?詞\|前置詞\|接[尾頭]辞\|間投詞\|冠　\?詞\|接続詞\)'
       \ containedin=DictionaryName
-syntax match DictionaryGrammer '^\(名\(　\?詞\)\?\|形\(容詞\)\?\|[自他助]\?動　\?詞\|副\(　\?詞\)\?\|前\(置詞\)\?\|代\(名詞\)\?\|接[尾頭]辞\|間投詞\|冠詞\|U\|C\)$'
+syntax match DictionaryGrammer '^\(名\(　\?詞\)\?\|形\(容詞\)\?\|[自他助]\?動　\?詞\|副\(　\?詞\)\?\|前\(置詞\)\?\|代\(名詞\)\?\|接[尾頭]辞\|間\(投詞\)\?\|冠\(　\?詞\)\?\|接\(続詞\)\?\|U\|C\)$'
       \ containedin=DictionaryName
-syntax match DictionaryGrammerLine '^\(代\?名　\?詞\|形容詞\|[自他助]\?動　\?詞\|副　\?詞\|前置詞\).*'
+syntax match DictionaryGrammerLine '^\(代\?名　\?詞\|形容詞\|[自他助]\?動　\?詞\|副　\?詞\|前置詞\|接[尾頭]辞\|間投詞\|冠　\?詞\|接続詞\).*'
       \ containedin=DictionaryName
 syntax match DictionaryGrammer '^\(动\|介\|量\|数\|连\)$'
       \ containedin=DictionaryName
