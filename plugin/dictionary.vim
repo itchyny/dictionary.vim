@@ -58,9 +58,12 @@ function! s:update()
     catch
     endtry
   endif
-  let b:proc = vimproc#pgroup_open(printf('%s "%s"', s:exe, word))
-  call b:proc.stdin.close()
-  call b:proc.stderr.close()
+  try
+    let b:proc = vimproc#pgroup_open(printf('%s "%s"', s:exe, word))
+    call b:proc.stdin.close()
+    call b:proc.stderr.close()
+  catch
+  endtry
   if !exists('s:updatetime')
     let s:updatetime = &updatetime
   endif
