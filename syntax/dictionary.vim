@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/25 13:37:46.
+" Last Change: 2013/06/25 13:44:58.
 " =============================================================================
 
 if version < 700
@@ -17,13 +17,13 @@ syntax region DictionaryName start='\%2l' end='$'
 syntax match DictionaryNumber '^\d\+\($\|\s\)'
 syntax region DictionaryPronounce start='^|' end='|\s*$'
       \ keepend containedin=DictionaryName oneline
-syntax region DictionaryPronounce start='^/' end='/\s*$'
+syntax region DictionaryPronounce start='^/' end='/;\?\s*$'
       \ keepend containedin=DictionaryName oneline
-syntax match DictionaryPronounceNoHead '/.\{-}/'
+syntax match DictionaryPronounceNoHead '/.\{-}/;\?'
       \ keepend containedin=DictionaryName contained oneline
 syntax match DictionaryName '^\S\+\s*\n|.*|\s*$'
       \ contains=DictionaryPronounce
-syntax match DictionaryName '^\S\+\s*\n/.*/\s*$'
+syntax match DictionaryName '^\S\+\s*\n/.*/;\?\s*$'
       \ contains=DictionaryPronounce
 syntax match DictionaryGroup '^[A-Z][a-z]\+ $'
 syntax match DictionaryGrammer '^\(noun\|adjective\|verb\|adverb\)$'
