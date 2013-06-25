@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/25 20:00:35.
+" Last Change: 2013/06/25 20:02:33.
 " =============================================================================
 
 if version < 700
@@ -32,6 +32,10 @@ syntax match DictionaryGrammer '^\(nombre\|adjetivo\|adverbio\|adeverbio\|pronom
       \ containedin=DictionaryName
 syntax match DictionaryGrammer '^\(Substantiv\|Adjektiv\|Adverb\|Suffix\|Präposition\|Zahlwort\|Interjektion\|Präfix\|Pronomen\|Artikel\|Abkürzung\|\S\+ Verb\|Konjunktion\|Eigenname\)\>.*$'
       \ containedin=DictionaryName
+syntax match DictionaryGrammerLine '^\(代\?名　\?詞\|形容詞\|[自他助]\?動　\?詞\|副　\?詞\|前置詞\).*'
+      \ containedin=DictionaryName
+syntax match DictionaryGrammerNoHead '\(代\?名　\?詞\|形容詞\|[自他助]\?動　\?詞\|副　\?詞\|前置詞\)'
+      \ containedin=DictionaryGrammerLine contained
 syntax match DictionaryGrammer '^\(代\?名　\?詞\|形容詞\|[自他助]\?動　\?詞\|副　\?詞\|前置詞\)'
       \ containedin=DictionaryName
 syntax match DictionaryGrammer '^\(名\(　\?詞\)\?\|形\(容詞\)\?\|[自他助]\?動　\?詞\|副\(　\?詞\)\?\|前\(置詞\)\?\|代\(名詞\)\?\|U\|C\)$'
@@ -51,6 +55,7 @@ highlight default link DictionaryPronounce Comment
 highlight default link DictionaryPronounceNoHead DictionaryPronounce
 highlight default link DictionaryGroup String
 highlight default link DictionaryGrammer Type
+highlight default link DictionaryGrammerNoHead DictionaryGrammer
 highlight default link DictionaryComment Comment
 highlight default link DictionarySemicolon Normal
 
