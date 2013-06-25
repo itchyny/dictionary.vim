@@ -1,3 +1,11 @@
+/* ============================================================================
+ * Filename: plugin/dictionary.m
+ * Version: 0.0
+ * Author: itchyny
+ * License: MIT License
+ * Last Change: 2013/06/25 13:25:31.
+ * ========================================================================= */
+
 #import <Foundation/Foundation.h>
 #import <CoreServices/CoreServices.h>
 
