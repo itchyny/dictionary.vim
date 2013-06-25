@@ -3,7 +3,7 @@
  * Version: 0.0
  * Author: itchyny
  * License: MIT License
- * Last Change: 2013/06/25 13:31:42.
+ * Last Change: 2013/06/25 18:33:16.
  * ========================================================================= */
 
 #import <Foundation/Foundation.h>
@@ -64,7 +64,8 @@ int main(int argc, char *argv[]) {
         } else if (eq3(r, lparen2) || eq3(r, rparen2)) {
           s[j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
           if (r[i + 1] == '\n') ++i;
-        } else if (eq3(r, lparen3) || eq3(r, rparen3)) {
+        } else if ((eq3(r, lparen3) || eq3(r, rparen3)) && j > 2 &&
+                  !(s[j - 1] >= 'A' && s[j - 1] <= 'Z' && s[j - 2] == '\n')) {
           s[j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
           if (r[i + 1] == '\n') ++i;
         } else if (eq3(r, lkakko) && eq3(r + 3, rkakko)) {
