@@ -3,7 +3,7 @@
  * Version: 0.0
  * Author: itchyny
  * License: MIT License
- * Last Change: 2013/06/25 18:54:16.
+ * Last Change: 2013/06/25 19:49:29.
  * ========================================================================= */
 
 #import <Foundation/Foundation.h>
@@ -42,6 +42,9 @@ int main(int argc, char *argv[]) {
         if (r[i + 2] == '\n' && (r[i + 1] > 'Z' || r[i + 1] < 'A')) {
           s[j] = r[++i];
           if (r[i] == '/') ++i;
+        } else if (r[i + 1] == '/') {
+          s[j] = ' ';
+          s[++j] = r[++i];
         } else if (r[i + 3] == '\n' && r[i + 2] == ' ') {
           if (r[i + 1] == ';' || r[i + 1] == ',') {
             s[j] = r[++i];
