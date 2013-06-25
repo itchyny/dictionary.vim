@@ -3,7 +3,7 @@
  * Version: 0.0
  * Author: itchyny
  * License: MIT License
- * Last Change: 2013/06/25 13:25:31.
+ * Last Change: 2013/06/25 13:29:31.
  * ========================================================================= */
 
 #import <Foundation/Foundation.h>
@@ -33,6 +33,8 @@ int main(int argc, char *argv[]) {
   char dots[] = { -30, -128, -90 }; /* "…"; */
   char lparen2[] = { -17, -68, -120 }; /* "（"; */
   char rparen2[] = { -17, -68, -119 }; /* "）"; */
+  char lparen3[] = { -29, -128, -104 }; /* "〘"; */
+  char rparen3[] = { -29, -128, -103 }; /* "〙"; */
   char lkakko[] = { -29, -128, -116 }; /* "「"; */
   char rkakko[] = { -29, -128, -115 }; /* "」"; */
   char dot[] =  { -30, -128, -94 }; /* "•"; */
@@ -63,6 +65,9 @@ int main(int argc, char *argv[]) {
         } else if (eq3(r, dquot)) {
           s[j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
         } else if (eq3(r, lparen2) || eq3(r, rparen2)) {
+          s[j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
+          if (r[i + 1] == '\n') ++i;
+        } else if (eq3(r, lparen3) || eq3(r, rparen3)) {
           s[j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
           if (r[i + 1] == '\n') ++i;
         } else if (eq3(r, lkakko) && eq3(r + 3, rkakko)) {
