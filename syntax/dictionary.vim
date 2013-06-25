@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/25 14:06:25.
+" Last Change: 2013/06/25 14:07:50.
 " =============================================================================
 
 if version < 700
@@ -28,7 +28,7 @@ syntax match DictionaryName '^\S\+\s*\n/.*/;\?'
 syntax match DictionaryGroup '^[A-Z][a-z]\+ $'
 syntax match DictionaryGrammer '^\(noun\|adjective\|verb\|adverb\)$'
       \ containedin=DictionaryName
-syntax match DictionaryGrammer '^\(名\(　\?詞\)\?\|形\(容詞\)\?\|[自他助]\?動　\?詞\|副\(　\?詞\)\?\|U\|C\|动\|介\)$'
+syntax match DictionaryGrammer '^\(名\(　\?詞\)\?\|形\(容詞\)\?\|[自他助]\?動　\?詞\|副\(　\?詞\)\?\|U\|C\|动\|介\|量\)$'
       \ containedin=DictionaryName
 syntax match DictionaryName '^\S\+\s*\n^\(noun\|adjective\|verb\|adverb\)'
       \ contains=DictionaryGrammer
