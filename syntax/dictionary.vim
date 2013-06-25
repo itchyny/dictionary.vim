@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/25 13:44:58.
+" Last Change: 2013/06/25 14:00:03.
 " =============================================================================
 
 if version < 700
@@ -23,8 +23,8 @@ syntax match DictionaryPronounceNoHead '/.\{-}/;\?'
       \ keepend containedin=DictionaryName contained oneline
 syntax match DictionaryName '^\S\+\s*\n|.*|\s*$'
       \ contains=DictionaryPronounce
-syntax match DictionaryName '^\S\+\s*\n/.*/;\?\s*$'
-      \ contains=DictionaryPronounce
+syntax match DictionaryName '^\S\+\s*\n/.*/;\?'
+      \ contains=DictionaryPronounceNoHead
 syntax match DictionaryGroup '^[A-Z][a-z]\+ $'
 syntax match DictionaryGrammer '^\(noun\|adjective\|verb\|adverb\)$'
       \ containedin=DictionaryName
