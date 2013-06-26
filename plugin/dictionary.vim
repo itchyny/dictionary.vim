@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/24 21:02:22.
+" Last Change: 2013/06/26 09:45:53.
 " =============================================================================
 
 if !(has('mac') || has('macunix') || has('guimacvim'))
