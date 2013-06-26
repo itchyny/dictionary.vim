@@ -1,13 +1,13 @@
+// ============================================================================
+// Filename: plugin/dictionary.m
+// Version: 0.0
+// Author: itchyny
+// License: MIT License
+// Last Change: 2013/06/26 20:50:24.
+// ============================================================================
+
 #import <Foundation/Foundation.h>
 #import <CoreServices/CoreServices.h>
-
-/* ============================================================================
- * Filename: plugin/dictionary.m
- * Version: 0.0
- * Author: itchyny
- * License: MIT License
- * Last Change: 2013/06/25 22:47:58.
- * ========================================================================= */
 
 #define eq3(x,y)\
   (*((x)+i+1)==y[0] && *((x)+i+2)==y[1] && *((x)+i+3)==y[2])
