@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2013/06/26 20:50:24.
+// Last Change: 2013/06/26 21:28:55.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -15,12 +15,12 @@
   (*((x)+j-1)==y[2] && *((x)+j-2)==y[1] && *((x)+j-3)==y[0])
 
 int main(int argc, char *argv[]) {
-  NSString *word = [NSString stringWithUTF8String:argv[1]];
-  NSString *result =
-    (NSString *)DCSCopyTextDefinition(NULL, (CFStringRef)word,
+  NSString* word = [NSString stringWithUTF8String:argv[1]];
+  NSString* result =
+    (NSString* )DCSCopyTextDefinition(NULL, (CFStringRef)word,
                                            CFRangeMake(0, [word length]));
   if (result == nil) return 1;
-  char *r = (char*)[result UTF8String];
+  char* r = (char*)[result UTF8String];
   int len = strlen(r);
   char s[len + 3];
   int i, j;
