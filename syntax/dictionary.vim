@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/26 09:54:25.
+" Last Change: 2013/06/28 07:46:10.
 " =============================================================================
 
 if version < 700
@@ -27,6 +27,10 @@ syntax match DictionaryName '^\S\+\s*\n/.*/;\?'
       \ contains=DictionaryPronounceNoHead
 syntax match DictionaryGroup '^[A-Z][a-z]\+ $'
 syntax match DictionaryGrammer '^\(noun\|adjective\|verb\|adverb\)$'
+      \ containedin=DictionaryName
+syntax match DictionaryGrammerNoHead '\(noun\|adjective\|verb\|adverb\)'
+      \ containedin=DictionaryGrammerLine contained
+syntax match DictionaryGrammerLine '^\(noun\|adjective\|verb\|adverb\).*$'
       \ containedin=DictionaryName
 syntax match DictionaryGrammer '^\(nombre\|adjetivo\|adverbio\|adeverbio\|pronombre\|verbo\).*$'
       \ containedin=DictionaryName
