@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/26 09:45:53.
+" Last Change: 2013/06/28 07:42:01.
 " =============================================================================
 
 if !(has('mac') || has('macunix') || has('guimacvim'))
@@ -78,6 +78,7 @@ function! s:check()
   let word = getline(1)
   let newword = substitute(word, ' $', '', '')
   if len(result) == 0 && b:input ==# newword && newword !=# ''
+    silent call feedkeys(mode() ==# 'i' ? "\<C-g>\<ESC>" : "g\<ESC>", 'n')
     return
   endif
   let b:input = newword
