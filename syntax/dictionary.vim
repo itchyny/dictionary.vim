@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/28 07:46:10.
+" Last Change: 2013/06/28 14:14:38.
 " =============================================================================
 
 if version < 700
@@ -48,7 +48,7 @@ syntax match DictionaryGrammer '^\(动\|介\|量\|数\|连\)$'
       \ containedin=DictionaryName
 syntax match DictionaryName '^\S\+\s*\n^\(noun\|adjective\|verb\|adverb\)\>'
       \ contains=DictionaryGrammer
-syntax match DictionaryName '^\(-\a\|～\|～́\|～̀\).*\|^\a\+\s/\S\+/.*$'
+syntax match DictionaryName '^\(-\a\|～\|～́\|～̀\|複\).*\|^\a\+\s/\S\+/.*$'
       \ contains=DictionaryGrammer,DictionaryPronounceNoHead,DictionarySemicolon,DictionaryComment 
 syntax match DictionaryComment '^DERIVATIVES\|｟.\{-}｠\|〖.\{-}〗\|〘.\{-}〙'
 syntax match DictionarySemicolon ';'

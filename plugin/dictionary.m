@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2013/06/26 21:28:55.
+// Last Change: 2013/06/28 14:19:49.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -35,6 +35,8 @@ int main(int argc, char *argv[]) {
   char lkakko[] = { -29, -128, -116 }; /* "「"; */
   char rkakko[] = { -29, -128, -115 }; /* "」"; */
   char dot[] =  { -30, -128, -94 }; /* "•"; */
+  char huku[] =  { -24, -92, -121 }; /* "複"; */
+  char nami[] =  { -17, -67, -98 }; /* "〜"; */
   for (i = j = 0; i < len; ++i, ++j) {
     /* s[j] = r[i]; continue; */
     if (r[i] == '\n') {
@@ -85,6 +87,10 @@ int main(int argc, char *argv[]) {
         } else if (eq3(r, dot)) {
           if (r[i + 4] == ' ' && r[i + 5] == '\n') ++i;
           i += 3; --j;
+        } else if (eq3(r, huku) && r[i + 4] == '\n' &&
+                  (eq3(r + 4, nami) || r[i + 5] == '-')) {
+          s[j] = r[i]; s[++j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
+          s[++j] = ' '; ++i;
         } else {
           s[j] = r[i];
         }
