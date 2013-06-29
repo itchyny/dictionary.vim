@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2013/06/28 14:19:49.
+// Last Change: 2013/06/30 00:58:05.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -91,6 +91,9 @@ int main(int argc, char *argv[]) {
                   (eq3(r + 4, nami) || r[i + 5] == '-')) {
           s[j] = r[i]; s[++j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
           s[++j] = ' '; ++i;
+        } else if ((r[i + 1] == 'U' || r[i + 1] == 'C') && r[i + 2] == '\n'
+                && (r[i + 3] == 'U' || r[i + 3] == 'C') && r[i + 4] == '\n') {
+          s[j] = r[i]; s[++j] = r[++i]; s[++j] = ' '; ++i; s[++j] = r[++i];
         } else {
           s[j] = r[i];
         }
