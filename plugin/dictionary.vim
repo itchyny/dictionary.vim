@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/28 13:35:22.
+" Last Change: 2013/06/29 20:42:56.
 " =============================================================================
 
 if !(has('mac') || has('macunix') || has('guimacvim'))
@@ -40,7 +40,7 @@ function! s:new(...)
     autocmd CursorHoldI <buffer> call s:check()
     autocmd BufLeave <buffer> call s:restore()
   augroup END
-  setlocal buftype=nofile noswapfile wrap
+  setlocal buftype=nofile noswapfile
         \ bufhidden=hide nobuflisted nofoldenable foldcolumn=0
         \ nolist wrap concealcursor=nvic completefunc= omnifunc=
         \ filetype=dictionary
