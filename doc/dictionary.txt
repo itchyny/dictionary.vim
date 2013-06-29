@@ -4,13 +4,13 @@ Version: 0.0
 Author: itchyny (https://github.com/itchyny)
 License: MIT License
 Repository: https://github.com/itchyny/dictionary.vim
-Last Change: 2013/06/23 18:23:06.
+Last Change: 2013/06/30 03:22:57.
 
 CONTENTS					*dictionary-contents*
 
 Introduction				|dictionary-introduction|
 Commands				|dictionary-commands|
-Syntax					|dictionary-syntax|
+Key Mappings				|dictionary-key-mappings|
 Troubleshooting				|dictionary-troubleshooting|
 Changelog				|dictionary-changelog|
 
@@ -25,6 +25,17 @@ COMMANDS					*dictionary-commands*
 :Dictionary [{options}]
 						*:Dictionary*
 		Open a new buffer and start searching in Dictionary.app.
+
+------------------------------------------------------------------------------
+KEY MAPPINGS					*thumbnail-key-mappings*
+
+Normal mode key mappings in dictionary buffers.
+<Plug>(dictionary_jump)				*<Plug>(dictionary_jump)*
+
+Normal mode default mappings in dictionary buffers.
+{lhs}		{rhs}
+--------	-----------------------
+<C-]>		<Plug>(dictionary_jump)
 
 ==============================================================================
 CHANGELOG					*dictionary-changelog*

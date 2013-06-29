@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/29 20:42:56.
+" Last Change: 2013/06/30 03:19:13.
 " =============================================================================
 
 if !(has('mac') || has('macunix') || has('guimacvim'))
@@ -40,6 +40,7 @@ function! s:new(...)
     autocmd CursorHoldI <buffer> call s:check()
     autocmd BufLeave <buffer> call s:restore()
   augroup END
+  call s:map()
   setlocal buftype=nofile noswapfile
         \ bufhidden=hide nobuflisted nofoldenable foldcolumn=0
         \ nolist wrap concealcursor=nvic completefunc= omnifunc=
@@ -104,6 +105,40 @@ function! s:restore()
     unlet s:updatetime
   catch
   endtry
+endfunction
+
+function! s:map()
+  if &l:filetype ==# 'dictionary'
+    return
+  endif
+  nnoremap <buffer><silent> <Plug>(dictionary_jump)
+        \ :<C-u>call <SID>jump()<CR>
+  nmap <buffer> <C-]> <Plug>(dictionary_jump)
+endfunction
+
+function! s:jump()
+  let curpos = getpos('.')
+  let c = curpos[2]
+  let line = split(getline(curpos[1]), '\<\|\>')
+  let i = 0
+  while c > 0 && i < len(line)
+    let c -= strlen(line[i])
+    let i += 1
+  endwhile
+  if i > len(line)
+    let i -= 1
+  elseif i < 1
+    let i += 1
+  endif
+  if line[i - 1] =~# '^[()\[\].,]'
+    if i < 2 | let i += 1 | else | let i -= 1 | endif
+  endif
+  call setline(1, line[max([0, i - 1])])
+  call cursor(1, 1)
+  startinsert!
+  if curpos[1] == 1
+    call setpos('.', curpos)
+  endif
 endfunction
 
 let &cpo = s:save_cpo
