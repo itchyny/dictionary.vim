@@ -4,12 +4,13 @@ Version: 0.0
 Author: itchyny (https://github.com/itchyny)
 License: MIT License
 Repository: https://github.com/itchyny/dictionary.vim
-Last Change: 2013/06/30 03:22:57.
+Last Change: 2013/07/06 08:10:31.
 
 CONTENTS					*dictionary-contents*
 
 Introduction				|dictionary-introduction|
 Commands				|dictionary-commands|
+Options					|dictionary-options|
 Key Mappings				|dictionary-key-mappings|
 Troubleshooting				|dictionary-troubleshooting|
 Changelog				|dictionary-changelog|
@@ -22,26 +23,66 @@ The *dictionary* plugin provides an interface for Dictionary.app in vim.
 ------------------------------------------------------------------------------
 COMMANDS					*dictionary-commands*
 
-:Dictionary [{options}]
+:Dictionary [{options}] [search word]
 						*:Dictionary*
 		Open a new buffer and start searching in Dictionary.app.
+		If a word is given, the plugin looks up the argument word.
 
 ------------------------------------------------------------------------------
-KEY MAPPINGS					*thumbnail-key-mappings*
+OPTIONS						*dictionary-options*
+
+You can specify some options to modify the appearance of the dictionary buffer.
+
+						*dictionary-options-horizontal*
+		-horizontal
+		Open the dictionary buffer horizontally.
+
+						*dictionary-options-vertical*
+		-vertical
+		Open the dictionary buffer vertically.
+
+						*dictionary-options-below*
+		-below
+		Open the split window with below command prefix. This option
+		is effective with -horizontal and -vertical.
+
+						*dictionary-options-here*
+		-here
+		Open the dictionary buffer at the same window of the current
+		buffer.
+
+						*dictionary-options-newtab*
+		-newtab
+		Open the dictionary buffer in a new tab. When this option is
+		set, it opens a new tab even when the current buffer is a
+		unnamed buffer with no text.
+
+						*dictionary-options-cursor-word*
+		-cursor-word
+		Open the dictionary with the word under the cursor.
+
+------------------------------------------------------------------------------
+KEY MAPPINGS					*dictionary-key-mappings*
 
 Normal mode key mappings in dictionary buffers.
 <Plug>(dictionary_jump)				*<Plug>(dictionary_jump)*
+		Search the word under the cursor.
+
+<Plug>(dictionary_exit)				*<Plug>(dictionary_exit)*
+		Close the dictionary buffer.
 
 Normal mode default mappings in dictionary buffers.
 {lhs}		{rhs}
 --------	-----------------------
 <C-]>		<Plug>(dictionary_jump)
+q		<Plug>(dictionary_exit)
 
 ==============================================================================
 CHANGELOG					*dictionary-changelog*
 
-0.0	2013-06-23
+0.0	2013-06-23, 06-30
 	- Initial commit and implementation
+	- Jump feature
 
 ==============================================================================
 vim:tw=78:sw=4:ts=8:ft=help:norl:noet:

@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/30 03:19:13.
+" Last Change: 2013/07/06 08:14:58.
 " =============================================================================
 
 if !(has('mac') || has('macunix') || has('guimacvim'))
@@ -13,25 +13,77 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-command! -nargs=* Dictionary call s:new(<q-args>)
+command! -nargs=* -complete=customlist,s:complete
+      \ Dictionary call s:new(<q-args>)
 
 let s:path = expand('<sfile>:p:h')
 let s:exe = printf('%s/dictionary', s:path)
 let s:mfile = printf('%s/dictionary.m', s:path)
 let s:gcc = executable('llvm-gcc') ? 'llvm-gcc' : 'gcc'
 let s:opt = '-O5 -framework CoreServices -framework Foundation'
-if !executable(s:exe) || getftime(s:exe) < getftime(s:mfile)
-  if executable(s:gcc)
-    call vimproc#system(printf('%s -o %s %s %s &', s:gcc, s:exe, s:opt, s:mfile))
+try
+  if !executable(s:exe) || getftime(s:exe) < getftime(s:mfile)
+    if executable(s:gcc)
+      call vimproc#system(printf('%s -o %s %s %s &',
+            \                     s:gcc, s:exe, s:opt, s:mfile))
+    endif
   endif
-endif
+catch
+endtry
 
-function! s:new(...)
+function! s:complete(arglead, cmdline, cursorpos)
+  try
+    let options = [ '-horizontal', '-vertical', '-here', '-newtab', '-below',
+          \ '-cursor-word' ]
+    let noconflict = [
+          \ [ '-horizontal', '-vertical', '-here', '-newtab' ],
+          \ [ '-here', '-below' ],
+          \ [ '-newtab', '-below' ],
+          \ ]
+    if a:arglead != ''
+      return sort(filter(options, 'stridx(v:val, a:arglead) != -1'))
+    else
+      let d = {}
+      for opt in options
+        let d[opt] = 0
+      endfor
+      for opt in options
+        if d[opt] == 0
+          for ncf in noconflict
+            let flg = 0
+            for n in ncf
+              let flg = flg || stridx(a:cmdline, n) >= 0
+              if flg
+                break
+              endif
+            endfor
+            if flg
+              for n in ncf
+                let d[n] = 1
+              endfor
+            endif
+          endfor
+        endif
+      endfor
+      return sort(filter(options,
+            \ 'd[v:val] == 0 && stridx(a:cmdline, v:val) == -1'))
+    endif
+  catch
+    return []
+  endtry
+endfunction
+
+function! s:new(args)
   if !executable(s:exe)
     return
   endif
-  new
-  call setline(1, a:0 ? a:000[0] : '')
+  let [isnewbuffer, command, words] = s:parse(a:args)
+  try
+    silent execute command
+  catch
+    return
+  endtry
+  call setline(1, join(words, ' '))
   call cursor(1, 1)
   startinsert!
   augroup Dictionary
@@ -45,7 +97,38 @@ function! s:new(...)
         \ bufhidden=hide nobuflisted nofoldenable foldcolumn=0
         \ nolist wrap concealcursor=nvic completefunc= omnifunc=
         \ filetype=dictionary
-  let b:input = ''
+  let b:dictionary = { 'input': '' }
+endfunction
+
+function! s:parse(args)
+  let args = split(a:args, '\s\+')
+  let isnewbuffer = bufname('%') != '' || &l:filetype != '' || &modified
+        \ || winheight(0) > 9 * &lines / 10
+  let command = 'new'
+  let below = ''
+  let words = []
+  for arg in args
+    if arg == '-horizontal'
+      let command = 'new'
+      let isnewbuffer = 1
+    elseif arg == '-vertical'
+      let command = 'vnew'
+      let isnewbuffer = 1
+    elseif arg == '-here' && !&modified
+      let command = 'new | wincmd p | quit | wincmd p'
+    elseif arg == '-newtab'
+      let command = 'tabnew'
+      let isnewbuffer = 1
+    elseif arg == '-below'
+      let below = 'below '
+    elseif arg == '-cursor-word'
+      let words = [s:cursorword()]
+    else
+      call add(words, arg)
+    endif
+  endfor
+  let command = 'if isnewbuffer | ' . below . command . ' | endif'
+  return [isnewbuffer, command, words]
 endfunction
 
 function! s:update()
@@ -78,11 +161,11 @@ function! s:check()
   let result = split(b:proc.stdout.read(), "\n")
   let word = getline(1)
   let newword = substitute(word, ' $', '', '')
-  if len(result) == 0 && b:input ==# newword && newword !=# ''
+  if len(result) == 0 && b:dictionary.input ==# newword && newword !=# ''
     silent call feedkeys(mode() ==# 'i' ? "\<C-g>\<ESC>" : "g\<ESC>", 'n')
     return
   endif
-  let b:input = newword
+  let b:dictionary.input = newword
   let curpos = getpos('.')
   silent % delete _
   call setline(1, word)
@@ -113,32 +196,43 @@ function! s:map()
   endif
   nnoremap <buffer><silent> <Plug>(dictionary_jump)
         \ :<C-u>call <SID>jump()<CR>
+  nnoremap <buffer><silent> <Plug>(dictionary_exit)
+        \ :<C-u>bdelete!<CR>
   nmap <buffer> <C-]> <Plug>(dictionary_jump)
+  nmap <buffer> q <Plug>(dictionary_exit)
 endfunction
 
 function! s:jump()
-  let curpos = getpos('.')
-  let c = curpos[2]
-  let line = split(getline(curpos[1]), '\<\|\>')
-  let i = 0
-  while c > 0 && i < len(line)
-    let c -= strlen(line[i])
-    let i += 1
-  endwhile
-  if i > len(line)
-    let i -= 1
-  elseif i < 1
-    let i += 1
-  endif
-  if line[i - 1] =~# '^[()\[\].,]'
-    if i < 2 | let i += 1 | else | let i -= 1 | endif
-  endif
-  call setline(1, line[max([0, i - 1])])
+  call setline(1, s:cursorword())
   call cursor(1, 1)
   startinsert!
   if curpos[1] == 1
     call setpos('.', curpos)
   endif
+endfunction
+
+function! s:cursorword()
+  try
+    let curpos = getpos('.')
+    let c = curpos[2]
+    let line = split(getline(curpos[1]), '\<\|\>')
+    let i = 0
+    while c > 0 && i < len(line)
+      let c -= strlen(line[i])
+      let i += 1
+    endwhile
+    if i > len(line)
+      let i -= 1
+    elseif i < 1
+      let i += 1
+    endif
+    if line[i - 1] =~# '^[()\[\].,;]'
+      if i < 2 | let i += 1 | else | let i -= 1 | endif
+    endif
+    return line[max([0, i - 1])]
+  catch
+    return ''
+  endtry
 endfunction
 
 let &cpo = s:save_cpo
