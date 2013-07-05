@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/06 08:14:58.
+" Last Change: 2013/07/06 08:20:36.
 " =============================================================================
 
 if !(has('mac') || has('macunix') || has('guimacvim'))
@@ -206,6 +206,7 @@ function! s:jump()
   call setline(1, s:cursorword())
   call cursor(1, 1)
   startinsert!
+  let curpos = getpos('.')
   if curpos[1] == 1
     call setpos('.', curpos)
   endif
