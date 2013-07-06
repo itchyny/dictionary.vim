@@ -4,7 +4,7 @@ Version: 0.0
 Author: itchyny (https://github.com/itchyny)
 License: MIT License
 Repository: https://github.com/itchyny/dictionary.vim
-Last Change: 2013/07/06 12:57:08.
+Last Change: 2013/07/07 08:30:56.
 
 CONTENTS					*dictionary-contents*
 
@@ -84,7 +84,7 @@ q		<Plug>(dictionary_exit)
 ==============================================================================
 CHANGELOG					*dictionary-changelog*
 
-0.0	2013-06-23, 06-30, 07-06
+0.0	2013-06-23, 06-30, 07-06, 07-07
 	- Initial commit and implementation
 	- Jump feature
 	- Word suggestion

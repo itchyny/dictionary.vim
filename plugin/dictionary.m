@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2013/07/07 08:17:31.
+// Last Change: 2013/07/07 08:46:25.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -23,18 +23,21 @@ NSString* dictionary(char* searchword) {
 }
 
 NSString* suggest(char* w) {
-  char format[512] = "look %s|head -n 25", command[512],
-       format_[512] = "look %c%c|grep '%s'|head -n 25",
-       output[50], *ptr, all[25][50], *sorted[200];
-  int length[25], i = 0, j = 0;
+#define SORTEDSIZE 200
+#define WORDLENGTH 50
+#define HEADARG 25
+  char format[512] = "look %s|head -n %d", command[512],
+       format_[512] = "look %c%c|grep '%s'|head -n %d",
+       output[WORDLENGTH], *ptr, all[HEADARG][WORDLENGTH], *sorted[SORTEDSIZE];
+  int length[HEADARG], i = 0, j = 0;
   FILE* fp;
   NSString* result;
-  if (w[0] == '^') sprintf(command, format_, w[1], w[4], w);
-  else             sprintf(command, format, w);
+  if (w[0] == '^') sprintf(command, format_, w[1], w[4], w, HEADARG);
+  else             sprintf(command, format, w, HEADARG);
   if ((fp = popen(command, "r")) == NULL) return nil;
-  for (i = 0; i < 25; ++i) { all[i][0] = '\0'; length[i] = 0; }
-  for (i = 0; i < 200; ++i) sorted[i] = NULL;
-  while (fgets(output, 50, fp) != NULL) {
+  for (i = 0; i < HEADARG; ++i) { all[i][0] = '\0'; length[i] = 0; }
+  for (i = 0; i < SORTEDSIZE; ++i) sorted[i] = NULL;
+  while (fgets(output, WORDLENGTH, fp) != NULL) {
     if (j >= 30) break;
     if (isalpha(output[0])) {
       strcpy(all[j], output);
@@ -46,13 +49,13 @@ NSString* suggest(char* w) {
   pclose(fp); ptr = NULL;
   for (i = 0; i < j; ++i) {
     j = length[i] * 6 - 6;
-    if (0 < j && j < 200) {
+    if (0 < j && j < SORTEDSIZE) {
       while (sorted[j] != NULL) ++j;
       sorted[j] = all[i];
       if (ptr == NULL) ptr = sorted[j];
     }
   }
-  for (i = 0 ; i < 200; ++i)
+  for (i = 0 ; i < SORTEDSIZE; ++i)
     if (sorted[i] != NULL && sorted[i][0] != '\0' &&
        (result = dictionary(sorted[i])) != nil) return result;
   return nil;
