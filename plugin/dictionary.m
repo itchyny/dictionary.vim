@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2013/06/30 00:58:05.
+// Last Change: 2013/07/06 11:33:45.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -14,14 +14,39 @@
 #define eq3neg(x,y)\
   (*((x)+j-1)==y[2] && *((x)+j-2)==y[1] && *((x)+j-3)==y[0])
 
-int main(int argc, char *argv[]) {
-  NSString* word = [NSString stringWithUTF8String:argv[1]];
+NSString* dictionary(char* searchword) {
+  NSString* word = [NSString stringWithUTF8String:searchword];
   NSString* result =
-    (NSString* )DCSCopyTextDefinition(NULL, (CFStringRef)word,
+    (NSString*)DCSCopyTextDefinition(NULL, (CFStringRef)word,
                                            CFRangeMake(0, [word length]));
-  if (result == nil) return 1;
+  return result;
+}
+
+NSString* suggest(char* w, int n) {
+  char format[312] = "look %s | head -n 20 | awk '{ print length(), $0 | \"sort -n\" }' | awk '{ print $2 }' | head -n %d | tail -n 1";
+  char command[312], output[312];
+  FILE* fp;
+  sprintf(command, format, w, n);
+  if ((fp = popen(command, "r")) == NULL) return nil;
+  fgets(output, 311, fp);
+  pclose(fp);
+  return dictionary(output);
+}
+
+int main(int argc, char *argv[]) {
+  if (argc < 2) return 0;
+  NSString* result = dictionary(argv[1]);
+  if (result == nil) {
+    if (strlen(argv[1]) > 100) return 0;
+    result = suggest(argv[1], 1);
+    if (result == nil) {
+      result = suggest(argv[1], 2);
+      if (result == nil) return 0;
+    }
+  }
   char* r = (char*)[result UTF8String];
   int len = strlen(r);
+  if (len < 1) return 0;
   char s[len + 3];
   int i, j;
   char lparen1[] = { -17, -67, -97 }; /* "｟";  */

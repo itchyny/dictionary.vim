@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/06 08:28:22.
+" Last Change: 2013/07/06 11:38:12.
 " =============================================================================
 
 if !(has('mac') || has('macunix') || has('guimacvim'))
@@ -153,6 +153,10 @@ function! s:update()
   set updatetime=50
 endfunction
 
+function! s:void()
+  silent call feedkeys(mode() ==# 'i' ? "\<C-g>\<ESC>" : "g\<ESC>", 'n')
+endfunction
+
 function! s:check()
   if !exists('b:proc') || b:proc.stdout.eof
     return
@@ -161,7 +165,7 @@ function! s:check()
   let word = getline(1)
   let newword = substitute(word, ' $', '', '')
   if len(result) == 0 && b:dictionary.input ==# newword && newword !=# ''
-    silent call feedkeys(mode() ==# 'i' ? "\<C-g>\<ESC>" : "g\<ESC>", 'n')
+    call s:void()
     return
   endif
   let b:dictionary.input = newword
@@ -169,9 +173,13 @@ function! s:check()
   silent % delete _
   call setline(1, word)
   call setline(2, result)
-  call b:proc.stdout.close()
-  call b:proc.stderr.close()
-  call b:proc.waitpid()
+  try
+    call b:proc.stdout.close()
+    call b:proc.stderr.close()
+    call b:proc.waitpid()
+  catch
+  endtry
+  unlet b:proc
   call cursor(1, 1)
   startinsert!
   if curpos[1] == 1
