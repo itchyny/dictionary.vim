@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2013/07/06 11:33:45.
+// Last Change: 2013/07/07 08:17:31.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -22,26 +22,58 @@ NSString* dictionary(char* searchword) {
   return result;
 }
 
-NSString* suggest(char* w, int n) {
-  char format[312] = "look %s | head -n 20 | awk '{ print length(), $0 | \"sort -n\" }' | awk '{ print $2 }' | head -n %d | tail -n 1";
-  char command[312], output[312];
+NSString* suggest(char* w) {
+  char format[512] = "look %s|head -n 25", command[512],
+       format_[512] = "look %c%c|grep '%s'|head -n 25",
+       output[50], *ptr, all[25][50], *sorted[200];
+  int length[25], i = 0, j = 0;
   FILE* fp;
-  sprintf(command, format, w, n);
+  NSString* result;
+  if (w[0] == '^') sprintf(command, format_, w[1], w[4], w);
+  else             sprintf(command, format, w);
   if ((fp = popen(command, "r")) == NULL) return nil;
-  fgets(output, 311, fp);
-  pclose(fp);
-  return dictionary(output);
+  for (i = 0; i < 25; ++i) { all[i][0] = '\0'; length[i] = 0; }
+  for (i = 0; i < 200; ++i) sorted[i] = NULL;
+  while (fgets(output, 50, fp) != NULL) {
+    if (j >= 30) break;
+    if (isalpha(output[0])) {
+      strcpy(all[j], output);
+      length[j] = strlen(all[j]);
+      if ((ptr = strchr(all[j++], '\n')) != NULL) *ptr = '\0';
+      else length[j - 1] = 0;
+    }
+  }
+  pclose(fp); ptr = NULL;
+  for (i = 0; i < j; ++i) {
+    j = length[i] * 6 - 6;
+    if (0 < j && j < 200) {
+      while (sorted[j] != NULL) ++j;
+      sorted[j] = all[i];
+      if (ptr == NULL) ptr = sorted[j];
+    }
+  }
+  for (i = 0 ; i < 200; ++i)
+    if (sorted[i] != NULL && sorted[i][0] != '\0' &&
+       (result = dictionary(sorted[i])) != nil) return result;
+  return nil;
 }
 
 int main(int argc, char *argv[]) {
-  if (argc < 2) return 0;
+  if (argc < 2 || strlen(argv[1]) == 0) return 0;
   NSString* result = dictionary(argv[1]);
   if (result == nil) {
-    if (strlen(argv[1]) > 100) return 0;
-    result = suggest(argv[1], 1);
-    if (result == nil) {
-      result = suggest(argv[1], 2);
-      if (result == nil) return 0;
+    int i, l;
+    if ((l = strlen(argv[1])) > 100) return 0;
+    for (i = 0; i < l; ++i)
+      if (!isalpha(argv[1][i])) return 0;
+    if ((result = suggest(argv[1])) == nil) {
+      if (l < 3) return 0;
+      int j; char s[l * 3 + 2]; s[0] = '^';
+      for (i = j = 0; i < l; ++i) {
+        s[++j] = argv[1][i]; s[++j] = '.'; s[++j] = '*';
+      }
+      s[++j] = '\0';
+      if ((result = suggest(s)) == nil) return 0;
     }
   }
   char* r = (char*)[result UTF8String];
@@ -86,12 +118,9 @@ int main(int argc, char *argv[]) {
         } else if (eq3(r, lparen1) && r[i + 4] == '\n' &&
             !(j > 2 && s[j - 1] == ' ' && '0' < s[j - 2] && s[j - 2] <= '9')) {
           s[j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i]; ++i;
-        } else if (eq3(r, rparen1)) {
-          s[j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
-          if (r[i + 1] == '\n') ++i;
         } else if (eq3(r, dquot)) {
           s[j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
-        } else if (eq3(r, lparen2) || eq3(r, rparen2)) {
+        } else if (eq3(r, lparen2) || eq3(r, rparen2) || eq3(r, rparen1)) {
           s[j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
           if (r[i + 1] == '\n') ++i;
         } else if ((eq3(r, lparen3) || eq3(r, rparen3)) && j > 2 &&

@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/06 11:38:12.
+" Last Change: 2013/07/07 03:13:21.
 " =============================================================================
 
 if !(has('mac') || has('macunix') || has('guimacvim'))
@@ -21,6 +21,8 @@ let s:exe = printf('%s/dictionary', s:path)
 let s:mfile = printf('%s/dictionary.m', s:path)
 let s:gcc = executable('llvm-gcc') ? 'llvm-gcc' : 'gcc'
 let s:opt = '-O5 -framework CoreServices -framework Foundation'
+let s:history = []
+let s:history_index = 0
 try
   if !executable(s:exe) || getftime(s:exe) < getftime(s:mfile)
     if executable(s:gcc)
@@ -33,15 +35,28 @@ endtry
 
 function! s:complete(arglead, cmdline, cursorpos)
   try
-    let options = [ '-horizontal', '-vertical', '-here', '-newtab', '-below',
+    let opts = [ '-horizontal', '-vertical', '-here', '-newtab', '-below',
           \ '-cursor-word' ]
+    let options = opts
     let noconflict = [
           \ [ '-horizontal', '-vertical', '-here', '-newtab' ],
           \ [ '-here', '-below' ],
           \ [ '-newtab', '-below' ],
           \ ]
     if a:arglead != ''
-      let options = sort(filter(options, 'stridx(v:val, a:arglead) != -1'))
+      let options = sort(filter(copy(opts), 'stridx(v:val, a:arglead) != -1'))
+      if len(options) == 0
+        let arglead = substitute(a:arglead, '^-\+', '', '')
+        let options = sort(filter(copy(opts), 'stridx(v:val, arglead) != -1'))
+        if len(options) == 0
+          try
+            let arglead = substitute(a:arglead, '\(.\)', '.*\1', 'g') . '.*'
+            let options = sort(filter(copy(opts), 'v:val =~? arglead'))
+          catch
+            let options = opts
+          endtry
+        endif
+      endif
     endif
     let d = {}
     for opt in options
@@ -74,6 +89,10 @@ endfunction
 
 function! s:new(args)
   if !executable(s:exe)
+    echomsg "The dictionary executable is not created."
+    if !executable('gcc')
+      echomsg "gcc is not available. (This plugin requires gcc.)"
+    endif
     return
   endif
   let [isnewbuffer, command, words] = s:parse(a:args)
@@ -96,7 +115,7 @@ function! s:new(args)
         \ bufhidden=hide nobuflisted nofoldenable foldcolumn=0
         \ nolist wrap concealcursor=nvic completefunc= omnifunc=
         \ filetype=dictionary
-  let b:dictionary = { 'input': '' }
+  let b:dictionary = { 'input': '', 'history': [] }
 endfunction
 
 function! s:parse(args)
@@ -203,20 +222,49 @@ function! s:map()
   endif
   nnoremap <buffer><silent> <Plug>(dictionary_jump)
         \ :<C-u>call <SID>jump()<CR>
+  nnoremap <buffer><silent> <Plug>(dictionary_jump_back)
+        \ :<C-u>call <SID>back()<CR>
   nnoremap <buffer><silent> <Plug>(dictionary_exit)
         \ :<C-u>bdelete!<CR>
   nmap <buffer> <C-]> <Plug>(dictionary_jump)
+  nmap <buffer> <C-[> <Plug>(dictionary_jump_back)
   nmap <buffer> q <Plug>(dictionary_exit)
 endfunction
 
-function! s:jump()
-  call setline(1, s:cursorword())
+function! s:with(word)
+  call setline(1, a:word)
   call cursor(1, 1)
   startinsert!
   let curpos = getpos('.')
   if curpos[1] == 1
     call setpos('.', curpos)
   endif
+endfunction
+
+function! s:jump()
+  let prev_word = substitute(getline(1), ' $', '', '')
+  if get(s:history, s:history_index - 1, '') !=# prev_word
+    call insert(s:history, prev_word, s:history_index)
+    let s:history_index += 1
+  endif
+  let word = s:cursorword()
+  call insert(s:history, word, s:history_index)
+  let s:history_index += 1
+  call s:with(word)
+  " echo s:history
+endfunction
+
+function! s:back()
+  " try
+    if len(s:history) && s:history_index
+      let s:history_index -= 1
+      call s:with(s:history[s:history_index])
+    else
+      call s:with('')
+    endif
+  " catch
+  " endtry
+  " call s:with('')
 endfunction
 
 function! s:cursorword()
@@ -234,8 +282,8 @@ function! s:cursorword()
     elseif i < 1
       let i += 1
     endif
-    if line[i - 1] =~# '^[()\[\].,;]'
-      if i < 2 | let i += 1 | else | let i -= 1 | endif
+    if line[i - 1] =~# '^[=()\[\]{}.,; :#<>/"]'
+      if i + 1 < len(line) | let i += 1 | else | let i -= 1 | endif
     endif
     return line[max([0, i - 1])]
   catch
@@ -245,4 +293,3 @@ endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
-

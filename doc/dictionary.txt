@@ -4,7 +4,7 @@ Version: 0.0
 Author: itchyny (https://github.com/itchyny)
 License: MIT License
 Repository: https://github.com/itchyny/dictionary.vim
-Last Change: 2013/07/06 08:10:31.
+Last Change: 2013/07/06 12:57:08.
 
 CONTENTS					*dictionary-contents*
 
@@ -68,6 +68,9 @@ Normal mode key mappings in dictionary buffers.
 <Plug>(dictionary_jump)				*<Plug>(dictionary_jump)*
 		Search the word under the cursor.
 
+<Plug>(dictionary_jump_back)			*<Plug>(dictionary_jump_back)*
+		Jump to [count] older word.
+
 <Plug>(dictionary_exit)				*<Plug>(dictionary_exit)*
 		Close the dictionary buffer.
 
@@ -75,14 +78,16 @@ Normal mode default mappings in dictionary buffers.
 {lhs}		{rhs}
 --------	-----------------------
 <C-]>		<Plug>(dictionary_jump)
+<C-t>		<Plug>(dictionary_jump_back)
 q		<Plug>(dictionary_exit)
 
 ==============================================================================
 CHANGELOG					*dictionary-changelog*
 
-0.0	2013-06-23, 06-30
+0.0	2013-06-23, 06-30, 07-06
 	- Initial commit and implementation
 	- Jump feature
+	- Word suggestion
 
 ==============================================================================
 vim:tw=78:sw=4:ts=8:ft=help:norl:noet:
