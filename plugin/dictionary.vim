@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/07 09:09:00.
+" Last Change: 2013/07/07 09:22:28.
 " =============================================================================
 
 if !(has('mac') || has('macunix') || has('guimacvim'))
@@ -88,28 +88,14 @@ function! s:complete(arglead, cmdline, cursorpos)
 endfunction
 
 function! s:new(args)
-  if !executable(s:exe)
-    echomsg "The dictionary executable is not created."
-    if !executable('gcc')
-      echomsg "gcc is not available. (This plugin requires gcc.)"
-    endif
-    return
-  endif
+  if s:check_exe() | call s:check_vimproc() | return | endif
+  if s:check_vimproc() | return | endif
   let [isnewbuffer, command, words] = s:parse(a:args)
-  try
-    silent execute command
-  catch
-    return
-  endtry
+  try | silent execute command | catch | return | endtry
   call setline(1, join(words, ' '))
   call cursor(1, 1)
   startinsert!
-  augroup Dictionary
-    autocmd!
-    autocmd CursorMovedI <buffer> call s:update()
-    autocmd CursorHoldI <buffer> call s:check()
-    autocmd BufLeave <buffer> call s:restore()
-  augroup END
+  call s:au()
   call s:map()
   setlocal buftype=nofile noswapfile
         \ bufhidden=hide nobuflisted nofoldenable foldcolumn=0
@@ -147,6 +133,15 @@ function! s:parse(args)
   endfor
   let command = 'if isnewbuffer | ' . below . command . ' | endif'
   return [isnewbuffer, command, words]
+endfunction
+
+function! s:au()
+  augroup Dictionary
+    autocmd!
+    autocmd CursorMovedI <buffer> call s:update()
+    autocmd CursorHoldI <buffer> call s:check()
+    autocmd BufLeave <buffer> call s:restore()
+  augroup END
 endfunction
 
 function! s:update()
@@ -289,6 +284,31 @@ function! s:cursorword()
   catch
     return ''
   endtry
+endfunction
+
+function! s:error(msg)
+  echohl ErrorMsg
+  echomsg a:msg
+  echohl None
+endfunction
+
+function! s:check_exe()
+  if !executable(s:exe)
+    call s:error("dictionary.vim: The dictionary executable is not created.")
+    if !executable('gcc')
+      call s:error("dictionary.vim: gcc is not available. (This plugin requires gcc.)")
+    endif
+    return 1
+  endif
+  return 0
+endfunction
+
+function! s:check_vimproc()
+  if !exists('*vimproc#pgroup_open')
+    call s:error("dictionary.vim: vimproc not found.")
+    return 1
+  endif
+  return 0
 endfunction
 
 let &cpo = s:save_cpo
