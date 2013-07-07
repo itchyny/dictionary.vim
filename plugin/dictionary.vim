@@ -3,12 +3,8 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/07 09:22:28.
+" Last Change: 2013/07/07 09:28:25.
 " =============================================================================
-
-if !(has('mac') || has('macunix') || has('guimacvim'))
-  finish
-endif
 
 let s:save_cpo = &cpo
 set cpo&vim
@@ -88,6 +84,7 @@ function! s:complete(arglead, cmdline, cursorpos)
 endfunction
 
 function! s:new(args)
+  if s:check_mac() | return | endif
   if s:check_exe() | call s:check_vimproc() | return | endif
   if s:check_vimproc() | return | endif
   let [isnewbuffer, command, words] = s:parse(a:args)
@@ -290,6 +287,14 @@ function! s:error(msg)
   echohl ErrorMsg
   echomsg a:msg
   echohl None
+endfunction
+
+function! s:check_mac()
+  if !(has('mac') || has('macunix') || has('guimacvim'))
+    call s:error("dictionary.vim: Mac required.")
+    return 1
+  endif
+  return 0
 endfunction
 
 function! s:check_exe()
