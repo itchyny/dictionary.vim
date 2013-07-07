@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2013/07/07 08:46:25.
+// Last Change: 2013/07/07 10:37:33.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
           s[j] = ' ';
           s[++j] = r[++i];
         } else if (r[i + 3] == '\n' && r[i + 2] == ' ') {
-          if (r[i + 1] == ';' || r[i + 1] == ',') {
+          if (r[i + 1] == ';' || r[i + 1] == ',' || r[i + 1] == ')') {
             s[j] = r[++i];
             s[++j] = r[++i];
           } else if (r[i + 1] == '.') {
@@ -151,6 +151,10 @@ int main(int argc, char *argv[]) {
         } else if ((r[i + 1] == 'U' || r[i + 1] == 'C') && r[i + 2] == '\n'
                 && (r[i + 3] == 'U' || r[i + 3] == 'C') && r[i + 4] == '\n') {
           s[j] = r[i]; s[++j] = r[++i]; s[++j] = ' '; ++i; s[++j] = r[++i];
+        } else if (s[j - 1] == '(') {
+          --j;
+        } else if (r[i + 1] == ')') {
+          s[j] = r[++i];
         } else {
           s[j] = r[i];
         }
