@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/07 03:13:21.
+" Last Change: 2013/07/07 09:09:00.
 " =============================================================================
 
 if !(has('mac') || has('macunix') || has('guimacvim'))
@@ -283,7 +283,7 @@ function! s:cursorword()
       let i += 1
     endif
     if line[i - 1] =~# '^[=()\[\]{}.,; :#<>/"]'
-      if i + 1 < len(line) | let i += 1 | else | let i -= 1 | endif
+      if i < len(line) | let i += 1 | else | let i -= 1 | endif
     endif
     return line[max([0, i - 1])]
   catch
