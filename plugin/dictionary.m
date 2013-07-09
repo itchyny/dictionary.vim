@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2013/07/09 14:58:22.
+// Last Change: 2013/07/09 15:02:22.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -16,10 +16,8 @@
 
 NSString* dictionary(char* searchword) {
   NSString* word = [NSString stringWithUTF8String:searchword];
-  NSString* result =
-    (NSString*)DCSCopyTextDefinition(NULL, (CFStringRef)word,
-                                           CFRangeMake(0, [word length]));
-  return result;
+  return (NSString*)DCSCopyTextDefinition(NULL, (CFStringRef)word,
+                                          CFRangeMake(0, [word length]));
 }
 
 NSString* suggest(char* w) {
