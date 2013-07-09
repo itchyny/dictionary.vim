@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2013/07/09 15:02:22.
+// Last Change: 2013/07/10 07:04:23.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -27,7 +27,7 @@ NSString* suggest(char* w) {
   char format[] = "look %s|head -n %d", command[512],
        format_[] = "look %c%c|grep '%s'|head -n %d",
        output[WORDLENGTH], *ptr, all[HEADARG][WORDLENGTH], *sorted[SORTEDSIZE];
-  int length[HEADARG], i = 0, j = 0;
+  int length[HEADARG], i, j = 0;
   FILE* fp;
   NSString* result;
   if (w[0] == '^') sprintf(command, format_, w[1], w[4], w, HEADARG);
