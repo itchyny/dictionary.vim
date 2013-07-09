@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2013/07/09 14:56:30.
+// Last Change: 2013/07/09 14:58:22.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -26,8 +26,8 @@ NSString* suggest(char* w) {
 #define SORTEDSIZE 200
 #define WORDLENGTH 50
 #define HEADARG 25
-  char format[512] = "look %s|head -n %d", command[512],
-       format_[512] = "look %c%c|grep '%s'|head -n %d",
+  char format[] = "look %s|head -n %d", command[512],
+       format_[] = "look %c%c|grep '%s'|head -n %d",
        output[WORDLENGTH], *ptr, all[HEADARG][WORDLENGTH], *sorted[SORTEDSIZE];
   int length[HEADARG], i = 0, j = 0;
   FILE* fp;
