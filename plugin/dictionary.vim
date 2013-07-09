@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/07 09:28:25.
+" Last Change: 2013/07/09 14:33:32.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -29,27 +29,28 @@ try
 catch
 endtry
 
+let s:options = [ '-horizontal', '-vertical', '-here', '-newtab', '-below',
+      \ '-cursor-word' ]
+let s:noconflict = [
+      \ [ '-horizontal', '-vertical', '-here', '-newtab' ],
+      \ [ '-here', '-below' ],
+      \ [ '-newtab', '-below' ],
+      \ ]
+
 function! s:complete(arglead, cmdline, cursorpos)
   try
-    let opts = [ '-horizontal', '-vertical', '-here', '-newtab', '-below',
-          \ '-cursor-word' ]
-    let options = opts
-    let noconflict = [
-          \ [ '-horizontal', '-vertical', '-here', '-newtab' ],
-          \ [ '-here', '-below' ],
-          \ [ '-newtab', '-below' ],
-          \ ]
+    let options = s:options
     if a:arglead != ''
-      let options = sort(filter(copy(opts), 'stridx(v:val, a:arglead) != -1'))
+      let options = sort(filter(copy(s:options), 'stridx(v:val, a:arglead) != -1'))
       if len(options) == 0
         let arglead = substitute(a:arglead, '^-\+', '', '')
-        let options = sort(filter(copy(opts), 'stridx(v:val, arglead) != -1'))
+        let options = sort(filter(copy(s:options), 'stridx(v:val, arglead) != -1'))
         if len(options) == 0
           try
             let arglead = substitute(a:arglead, '\(.\)', '.*\1', 'g') . '.*'
-            let options = sort(filter(copy(opts), 'v:val =~? arglead'))
+            let options = sort(filter(copy(s:options), 'v:val =~? arglead'))
           catch
-            let options = opts
+            let options = s:options
           endtry
         endif
       endif
@@ -60,7 +61,7 @@ function! s:complete(arglead, cmdline, cursorpos)
     endfor
     for opt in options
       if d[opt] == 0
-        for ncf in noconflict
+        for ncf in s:noconflict
           let flg = 0
           for n in ncf
             let flg = flg || stridx(a:cmdline, n) >= 0
