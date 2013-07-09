@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2013/07/07 10:37:33.
+// Last Change: 2013/07/09 14:56:30.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -38,7 +38,7 @@ NSString* suggest(char* w) {
   for (i = 0; i < HEADARG; ++i) { all[i][0] = '\0'; length[i] = 0; }
   for (i = 0; i < SORTEDSIZE; ++i) sorted[i] = NULL;
   while (fgets(output, WORDLENGTH, fp) != NULL) {
-    if (j >= 30) break;
+    if (j >= HEADARG) break;
     if (isalpha(output[0])) {
       strcpy(all[j], output);
       length[j] = strlen(all[j]);
