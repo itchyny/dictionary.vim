@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/09 15:53:42.
+" Last Change: 2013/07/10 08:56:34.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -236,13 +236,9 @@ endfunction
 
 function! s:jump()
   let prev_word = substitute(getline(1), ' $', '', '')
-  if get(s:history, s:history_index - 1, '') !=# prev_word
-    call insert(s:history, prev_word, s:history_index)
-    let s:history_index += 1
-  endif
-  let word = s:cursorword()
-  call insert(s:history, word, s:history_index)
+  call insert(s:history, prev_word, s:history_index)
   let s:history_index += 1
+  let word = s:cursorword()
   call s:with(word)
   " echo s:history
 endfunction
