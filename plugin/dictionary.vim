@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/10 14:30:00.
+" Last Change: 2013/07/10 18:45:08.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -93,6 +93,7 @@ function! s:new(args)
   startinsert!
   call s:au()
   call s:map()
+  call s:initdict()
   setlocal buftype=nofile noswapfile
         \ bufhidden=hide nobuflisted nofoldenable foldcolumn=0
         \ nolist wrap concealcursor=nvic completefunc= omnifunc=
