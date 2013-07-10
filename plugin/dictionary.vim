@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/10 08:56:34.
+" Last Change: 2013/07/10 14:30:00.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -17,8 +17,6 @@ let s:exe = printf('%s/dictionary', s:path)
 let s:mfile = printf('%s/dictionary.m', s:path)
 let s:gcc = executable('llvm-gcc') ? 'llvm-gcc' : 'gcc'
 let s:opt = '-O5 -framework CoreServices -framework Foundation'
-let s:history = []
-let s:history_index = 0
 try
   if !executable(s:exe) || getftime(s:exe) < getftime(s:mfile)
     if executable(s:gcc)
@@ -99,7 +97,6 @@ function! s:new(args)
         \ bufhidden=hide nobuflisted nofoldenable foldcolumn=0
         \ nolist wrap concealcursor=nvic completefunc= omnifunc=
         \ filetype=dictionary
-  let b:dictionary = { 'input': '', 'history': [] }
 endfunction
 
 function! s:parse(args)
@@ -135,34 +132,40 @@ endfunction
 
 function! s:au()
   augroup Dictionary
-    autocmd!
     autocmd CursorMovedI <buffer> call s:update()
     autocmd CursorHoldI <buffer> call s:check()
     autocmd BufLeave <buffer> call s:restore()
+    autocmd BufEnter <buffer> call s:updatetime()
   augroup END
+endfunction
+
+function! s:initdict()
+  let b:dictionary = { 'input': '', 'history': [] }
+  let b:dictionary.jump_history = []
+  let b:dictionary.jump_history_index = 0
 endfunction
 
 function! s:update()
   setlocal completefunc= omnifunc=
   let word = getline(1)
-  if exists('b:proc')
+  if exists('b:dictionary.proc')
     call s:check()
     try
-      call b:proc.kill(15)
-      call b:proc.waitpid()
+      call b:dictionary.proc.kill(15)
+      call b:dictionary.proc.waitpid()
     catch
     endtry
   endif
   try
-    let b:proc = vimproc#pgroup_open(printf('%s "%s"', s:exe, word))
-    call b:proc.stdin.close()
-    call b:proc.stderr.close()
+    let b:dictionary.proc = vimproc#pgroup_open(printf('%s "%s"', s:exe, word))
+    call b:dictionary.proc.stdin.close()
+    call b:dictionary.proc.stderr.close()
   catch
+    if !exists('b:dictionary')
+      call s:initdict()
+    endif
   endtry
-  if !exists('s:updatetime')
-    let s:updatetime = &updatetime
-  endif
-  set updatetime=50
+  call s:updatetime()
 endfunction
 
 function! s:void()
@@ -170,33 +173,43 @@ function! s:void()
 endfunction
 
 function! s:check()
-  if !exists('b:proc') || b:proc.stdout.eof
-    return
-  endif
-  let result = split(b:proc.stdout.read(), "\n")
-  let word = getline(1)
-  let newword = substitute(word, ' $', '', '')
-  if len(result) == 0 && b:dictionary.input ==# newword && newword !=# ''
-    call s:void()
-    return
-  endif
-  let b:dictionary.input = newword
-  let curpos = getpos('.')
-  silent % delete _
-  call setline(1, word)
-  call setline(2, result)
   try
-    call b:proc.stdout.close()
-    call b:proc.stderr.close()
-    call b:proc.waitpid()
+    if !exists('b:dictionary.proc') || b:dictionary.proc.stdout.eof
+      return
+    endif
+    let result = split(b:dictionary.proc.stdout.read(), "\n")
+    let word = getline(1)
+    let newword = substitute(word, ' $', '', '')
+    if len(result) == 0 && b:dictionary.input ==# newword && newword !=# ''
+      call s:void()
+      return
+    endif
+    let b:dictionary.input = newword
+    let curpos = getpos('.')
+    silent % delete _
+    call setline(1, word)
+    call setline(2, result)
+    try
+      call b:dictionary.proc.stdout.close()
+      call b:dictionary.proc.stderr.close()
+      call b:dictionary.proc.waitpid()
+    catch
+    endtry
+    unlet b:dictionary.proc
+    call cursor(1, 1)
+    startinsert!
+    if curpos[1] == 1
+      call setpos('.', curpos)
+    endif
   catch
   endtry
-  unlet b:proc
-  call cursor(1, 1)
-  startinsert!
-  if curpos[1] == 1
-    call setpos('.', curpos)
+endfunction
+
+function! s:updatetime()
+  if !exists('s:updatetime')
+    let s:updatetime = &updatetime
   endif
+  set updatetime=50
 endfunction
 
 function! s:restore()
@@ -235,25 +248,28 @@ function! s:with(word)
 endfunction
 
 function! s:jump()
-  let prev_word = substitute(getline(1), ' $', '', '')
-  call insert(s:history, prev_word, s:history_index)
-  let s:history_index += 1
-  let word = s:cursorword()
-  call s:with(word)
-  " echo s:history
+  try
+    let prev_word = substitute(getline(1), ' $', '', '')
+    call insert(b:dictionary.jump_history, prev_word, b:dictionary.jump_history_index)
+    let b:dictionary.jump_history_index += 1
+    let word = s:cursorword()
+    call s:with(word)
+  catch
+    call s:with('')
+  endtry
 endfunction
 
 function! s:back()
-  " try
-    if len(s:history) && s:history_index
-      let s:history_index -= 1
-      call s:with(s:history[s:history_index])
+  try
+    if len(b:dictionary.jump_history) && b:dictionary.jump_history_index
+      let b:dictionary.jump_history_index -= 1
+      call s:with(b:dictionary.jump_history[b:dictionary.jump_history_index])
     else
       call s:with('')
     endif
-  " catch
-  " endtry
-  " call s:with('')
+  catch
+    call s:with('')
+  endtry
 endfunction
 
 function! s:cursorword()
