@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2013/07/10 07:04:23.
+// Last Change: 2013/07/11 14:45:21.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -110,9 +110,7 @@ int main(int argc, char *argv[]) {
             s[j] = r[++i];
             s[++j] = r[++i];
           } else if (r[i + 1] == '.') {
-            s[j] = r[++i];
-            s[++j] = r[++i];
-            s[++j] = r[++i];
+            s[j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
           } else {
             s[j] = r[i];
           }
