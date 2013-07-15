@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/10 18:45:08.
+" Last Change: 2013/07/16 08:41:06.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -96,7 +96,7 @@ function! s:new(args)
   call s:initdict()
   setlocal buftype=nofile noswapfile
         \ bufhidden=hide nobuflisted nofoldenable foldcolumn=0
-        \ nolist wrap concealcursor=nvic completefunc= omnifunc=
+        \ nolist wrap completefunc= omnifunc=
         \ filetype=dictionary
 endfunction
 
