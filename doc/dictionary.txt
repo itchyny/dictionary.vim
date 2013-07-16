@@ -4,13 +4,14 @@ Version: 0.0
 Author: itchyny (https://github.com/itchyny)
 License: MIT License
 Repository: https://github.com/itchyny/dictionary.vim
-Last Change: 2013/07/07 08:30:56.
+Last Change: 2013/07/16 17:27:16.
 
 CONTENTS					*dictionary-contents*
 
 Introduction				|dictionary-introduction|
 Commands				|dictionary-commands|
 Options					|dictionary-options|
+Variables				|dictionary-variables|
 Key Mappings				|dictionary-key-mappings|
 Troubleshooting				|dictionary-troubleshooting|
 Changelog				|dictionary-changelog|
@@ -60,6 +61,27 @@ You can specify some options to modify the appearance of the dictionary buffer.
 						*dictionary-options-cursor-word*
 		-cursor-word
 		Open the dictionary with the word under the cursor.
+
+------------------------------------------------------------------------------
+VARIABLES					*dictionary-variables*
+
+g:dictionary_executable_path			*g:dictionary_executable_path*
+		The path of the dictionary executable.
+		In default, the same path of dictionary.m is used.
+
+g:dictionary_executable_name			*g:dictionary_executable_name*
+		The name of the dictionary executable.
+		In default, "dictionary".
+
+g:dictionary_compile_command			*g:dictionary_compile_command*
+		The command name for compile dictionary.m.
+		In default, if |llvm-gcc| is available, |llvm-gcc| is used, |gcc|
+		otherwise.
+
+g:dictionary_compile_option			*g:dictionary_compile_option*
+		The option used for compile dictionary.m.
+		The default value is
+		"-O3 -framework CoreServices -framework Foundation"
 
 ------------------------------------------------------------------------------
 KEY MAPPINGS					*dictionary-key-mappings*

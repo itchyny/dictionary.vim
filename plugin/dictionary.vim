@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/16 08:41:06.
+" Last Change: 2013/07/16 17:44:16.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -13,15 +13,18 @@ command! -nargs=* -complete=customlist,s:complete
       \ Dictionary call s:new(<q-args>)
 
 let s:path = expand('<sfile>:p:h')
-let s:exe = printf('%s/dictionary', s:path)
 let s:mfile = printf('%s/dictionary.m', s:path)
-let s:gcc = executable('llvm-gcc') ? 'llvm-gcc' : 'gcc'
-let s:opt = '-O5 -framework CoreServices -framework Foundation'
+let s:exepath = substitute(get(g:, 'dictionary_executable_path', s:path), '/*$', '', '')
+let s:exename = get(g:, 'dictionary_executable_name', 'dictionary')
+let s:exe = expand(printf('%s/%s', s:exepath, s:exename))
+let s:gccdefault = executable('llvm-gcc') ? 'llvm-gcc' : 'gcc'
+let s:gcc = get(g:, 'dictionary_compile_command', s:gccdefault)
+let s:optdefault = '-O3 -framework CoreServices -framework Foundation'
+let s:opt = get(g:, 'dictionary_compile_option', s:optdefault)
 try
   if !executable(s:exe) || getftime(s:exe) < getftime(s:mfile)
     if executable(s:gcc)
-      call vimproc#system(printf('%s -o %s %s %s &',
-            \                     s:gcc, s:exe, s:opt, s:mfile))
+      call vimproc#system(printf('%s -o %s %s %s &', s:gcc, s:exe, s:opt, s:mfile))
     endif
   endif
 catch
@@ -314,7 +317,13 @@ endfunction
 function! s:check_exe()
   if !executable(s:exe)
     call s:error("dictionary.vim: The dictionary executable is not created.")
-    if !executable('gcc')
+    try
+      if executable(s:gcc)
+        call vimproc#system(printf('%s -o %s %s %s &', s:gcc, s:exe, s:opt, s:mfile))
+      endif
+    catch
+    endtry
+    if !exists('g:dictionary_compile_option') && !executable('gcc')
       call s:error("dictionary.vim: gcc is not available. (This plugin requires gcc.)")
     endif
     return 1
