@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/17 01:42:26.
+" Last Change: 2013/07/17 01:58:05.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -235,9 +235,12 @@ function! s:map()
         \ :<C-u>call <SID>back()<CR>
   nnoremap <buffer><silent> <Plug>(dictionary_exit)
         \ :<C-u>bdelete!<CR>
+  inoremap <buffer><silent> <Plug>(dictionary_nop)
+        \ <Nop>
   nmap <buffer> <C-]> <Plug>(dictionary_jump)
   nmap <buffer> <C-t> <Plug>(dictionary_jump_back)
   nmap <buffer> q <Plug>(dictionary_exit)
+  imap <buffer> <CR> <Plug>(dictionary_nop)
 endfunction
 
 function! s:with(word)

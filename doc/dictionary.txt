@@ -4,7 +4,7 @@ Version: 0.0
 Author: itchyny (https://github.com/itchyny)
 License: MIT License
 Repository: https://github.com/itchyny/dictionary.vim
-Last Change: 2013/07/16 17:27:16.
+Last Change: 2013/07/17 02:00:31.
 
 CONTENTS					*dictionary-contents*
 
@@ -98,10 +98,20 @@ Normal mode key mappings in dictionary buffers.
 
 Normal mode default mappings in dictionary buffers.
 {lhs}		{rhs}
+--------	----------------------------
+<C-]>		|<Plug>(dictionary_jump)|
+<C-t>		|<Plug>(dictionary_jump_back)|
+q		|<Plug>(dictionary_exit)|
+
+Insert mode key mappings.
+
+<Plug>(thumbnail_nop)				*i_<Plug>(thumbnail_nop)*
+		Nothing.
+
+Insert mode default mappings in dictionary buffers.
+{lhs}		{rhs}
 --------	-----------------------
-<C-]>		<Plug>(dictionary_jump)
-<C-t>		<Plug>(dictionary_jump_back)
-q		<Plug>(dictionary_exit)
+<CR>		|i_<Plug>(thumbnail_nop)|
 
 ==============================================================================
 CHANGELOG					*dictionary-changelog*
