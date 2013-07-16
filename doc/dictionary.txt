@@ -4,7 +4,7 @@ Version: 0.0
 Author: itchyny (https://github.com/itchyny)
 License: MIT License
 Repository: https://github.com/itchyny/dictionary.vim
-Last Change: 2013/07/17 02:00:31.
+Last Change: 2013/07/17 02:03:31.
 
 CONTENTS					*dictionary-contents*
 
@@ -116,10 +116,11 @@ Insert mode default mappings in dictionary buffers.
 ==============================================================================
 CHANGELOG					*dictionary-changelog*
 
-0.0	2013-06-23, 06-30, 07-06, 07-07
+0.0	2013-06-23, 06-30, 07-06, 07-07, 07-16
 	- Initial commit and implementation
 	- Jump feature
 	- Word suggestion
+	- Configurable path of the dictionary executable, compile options
 
 ==============================================================================
 vim:tw=78:sw=4:ts=8:ft=help:norl:noet:
