@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/17 01:58:05.
+" Last Change: 2013/07/17 02:06:01.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -268,7 +268,8 @@ endfunction
 function! s:back()
   try
     if len(b:dictionary.jump_history) && b:dictionary.jump_history_index
-      let b:dictionary.jump_history_index -= 1
+      let b:dictionary.jump_history_index -= max([v:count, 1])
+      let b:dictionary.jump_history_index = max([b:dictionary.jump_history_index, 0])
       call s:with(b:dictionary.jump_history[b:dictionary.jump_history_index])
     else
       call s:with('')
