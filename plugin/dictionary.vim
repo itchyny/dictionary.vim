@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/17 02:06:01.
+" Last Change: 2013/07/19 14:19:21.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -143,9 +143,8 @@ function! s:au()
 endfunction
 
 function! s:initdict()
-  let b:dictionary = { 'input': '', 'history': [] }
-  let b:dictionary.jump_history = []
-  let b:dictionary.jump_history_index = 0
+  let b:dictionary = { 'input': '', 'history': [],
+        \ 'jump_history': [], 'jump_history_index': 0 }
 endfunction
 
 function! s:update()

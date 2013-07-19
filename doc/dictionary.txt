@@ -4,7 +4,7 @@ Version: 0.0
 Author: itchyny (https://github.com/itchyny)
 License: MIT License
 Repository: https://github.com/itchyny/dictionary.vim
-Last Change: 2013/07/17 02:03:31.
+Last Change: 2013/07/17 18:20:27.
 
 CONTENTS					*dictionary-contents*
 
@@ -105,7 +105,7 @@ q		|<Plug>(dictionary_exit)|
 
 Insert mode key mappings.
 
-<Plug>(thumbnail_nop)				*i_<Plug>(thumbnail_nop)*
+<Plug>(thumbnail_nop)				*i_<Plug>(dictionary_nop)*
 		Nothing.
 
 Insert mode default mappings in dictionary buffers.
