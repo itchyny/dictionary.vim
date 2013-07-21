@@ -4,7 +4,7 @@ Version: 0.0
 Author: itchyny (https://github.com/itchyny)
 License: MIT License
 Repository: https://github.com/itchyny/dictionary.vim
-Last Change: 2013/07/17 18:20:27.
+Last Change: 2013/07/19 16:42:58.
 
 CONTENTS					*dictionary-contents*
 
@@ -44,13 +44,14 @@ You can specify some options to modify the appearance of the dictionary buffer.
 
 						*dictionary-options-below*
 		-below
-		Open the split window with below command prefix. This option
-		is effective with -horizontal and -vertical.
+		Open the split window with below command prefix.
 
 						*dictionary-options-here*
-		-here
-		Open the dictionary buffer at the same window of the current
-		buffer.
+		-here[!]
+		Open the thumbnail buffer at the same window of the current
+		buffer. If some changes exist in the current buffer, this
+		option is ignored. An '!' is added to discard any changes in
+		the current buffer.
 
 						*dictionary-options-newtab*
 		-newtab
@@ -116,11 +117,12 @@ Insert mode default mappings in dictionary buffers.
 ==============================================================================
 CHANGELOG					*dictionary-changelog*
 
-0.0	2013-06-23, 06-30, 07-06, 07-07, 07-16
+0.0	2013-06-23, 06-30, 07-06, 07-07, 07-16, 07-19
 	- Initial commit and implementation
 	- Jump feature
 	- Word suggestion
 	- Configurable path of the dictionary executable, compile options
+	- Improve option parser and add '-here!'.
 
 ==============================================================================
 vim:tw=78:sw=4:ts=8:ft=help:norl:noet:

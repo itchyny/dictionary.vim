@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/19 14:19:21.
+" Last Change: 2013/07/21 14:18:35.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -110,20 +110,25 @@ function! s:parse(args)
   let below = ''
   let words = []
   for arg in args
-    if arg == '-horizontal'
+    if arg =~? '^-*horizontal$'
       let command = 'new'
       let isnewbuffer = 1
-    elseif arg == '-vertical'
+    elseif arg =~? '^-*vertical$'
       let command = 'vnew'
       let isnewbuffer = 1
-    elseif arg == '-here' && !&modified
-      let command = 'new | wincmd p | quit | wincmd p'
-    elseif arg == '-newtab'
+    elseif arg =~? '^-*here$'
+      let command = 'try | enew | catch | tabnew | endtry'
+    elseif arg =~? '^-*here!$'
+      let command = 'enew!'
+    elseif arg =~? '^-*newtab$'
       let command = 'tabnew'
       let isnewbuffer = 1
-    elseif arg == '-below'
+    elseif arg =~? '^-*below$'
+      if command == 'tabnew'
+        let command = 'new'
+      endif
       let below = 'below '
-    elseif arg == '-cursor-word'
+    elseif arg =~? '^-*cursor-word$'
       let words = [s:cursorword()]
     else
       call add(words, arg)
@@ -310,7 +315,7 @@ endfunction
 
 function! s:check_mac()
   if !(has('mac') || has('macunix') || has('guimacvim'))
-    call s:error("dictionary.vim: Mac required.")
+    call s:error("dictionary.vim: Mac is required.")
     return 1
   endif
   return 0
@@ -335,7 +340,7 @@ endfunction
 
 function! s:check_vimproc()
   if !exists('*vimproc#pgroup_open')
-    call s:error("dictionary.vim: vimproc not found.")
+    call s:error("dictionary.vim: vimproc is not found.")
     return 1
   endif
   return 0
