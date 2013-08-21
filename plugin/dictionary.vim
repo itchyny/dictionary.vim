@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/07/22 13:23:00.
+" Last Change: 2013/08/21 14:44:20.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -309,13 +309,13 @@ endfunction
 
 function! s:error(msg)
   echohl ErrorMsg
-  echomsg a:msg
+  echomsg 'dictionary.vim: '.a:msg
   echohl None
 endfunction
 
 function! s:check_mac()
   if !(has('mac') || has('macunix') || has('guimacvim'))
-    call s:error("dictionary.vim: Mac is required.")
+    call s:error('Mac is required.')
     return 1
   endif
   return 0
@@ -323,7 +323,7 @@ endfunction
 
 function! s:check_exe()
   if !executable(s:exe)
-    call s:error("dictionary.vim: The dictionary executable is not created.")
+    call s:error('The dictionary executable is not created.')
     try
       if executable(s:gcc)
         call vimproc#system(printf('%s -o %s %s %s &', s:gcc, s:exe, s:opt, s:mfile))
@@ -331,7 +331,7 @@ function! s:check_exe()
     catch
     endtry
     if !exists('g:dictionary_compile_option') && !executable('gcc')
-      call s:error("dictionary.vim: gcc is not available. (This plugin requires gcc.)")
+      call s:error('gcc is not available. (This plugin requires gcc.)')
     endif
     return 1
   endif
@@ -340,7 +340,7 @@ endfunction
 
 function! s:check_vimproc()
   if !exists('*vimproc#pgroup_open')
-    call s:error("dictionary.vim: vimproc is not found.")
+    call s:error('vimproc is not found.')
     return 1
   endif
   return 0
