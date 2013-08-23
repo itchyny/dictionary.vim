@@ -3,8 +3,12 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/08/21 14:44:20.
+" Last Change: 2013/08/23 14:31:22.
 " =============================================================================
+
+if exists('g:loaded_dictionary') && g:loaded_dictionary
+  finish
+endif
 
 let s:save_cpo = &cpo
 set cpo&vim
@@ -345,6 +349,8 @@ function! s:check_vimproc()
   endif
   return 0
 endfunction
+
+let g:loaded_dictionary = 1
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
