@@ -3,10 +3,10 @@
 
     :Dictionary
 
-![dictionary.vim](https://raw.github.com/itchyny/dictionary.vim/master/image/image1.png)
-![dictionary.vim](https://raw.github.com/itchyny/dictionary.vim/master/image/image2.png)
-![dictionary.vim](https://raw.github.com/itchyny/dictionary.vim/master/image/image3.png)
-![dictionary.vim](https://raw.github.com/itchyny/dictionary.vim/master/image/image4.png)
+![dictionary.vim](https://raw.github.com/wiki/itchyny/dictionary.vim/image/image1.png)
+![dictionary.vim](https://raw.github.com/wiki/itchyny/dictionary.vim/image/image2.png)
+![dictionary.vim](https://raw.github.com/wiki/itchyny/dictionary.vim/image/image3.png)
+![dictionary.vim](https://raw.github.com/wiki/itchyny/dictionary.vim/image/image4.png)
 
 ## Requirement
 + Dictionary.app
