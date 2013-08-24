@@ -22,9 +22,9 @@ MIT License
 ## Installation
 ### Manually
 1. Put plugin/dictionary.vim to $VIM/plugin/.
-2. Put plugin/dictionary.m to $m/plugin/.
-3. Put syntax/dictionary.vim to $VIM/syntax/.
-4. Put autoload/dictionary.vim to $VIM/autoload/.
+2. Put syntax/dictionary.vim to $VIM/syntax/.
+3. Put autoload/dictionary.vim to $VIM/autoload/.
+4. Put autoload/dictionary.m to $VIM/autoload/.
 5. Put doc/dictionary.txt to $VIM/doc/.
 
 ### Vundle (https://github.com/gmarik/vundle)
