@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/08/23 19:51:38.
+" Last Change: 2013/08/27 11:37:43.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -41,7 +41,7 @@ function! dictionary#new(args)
   call s:initdict()
   setlocal buftype=nofile noswapfile
         \ bufhidden=hide nobuflisted nofoldenable foldcolumn=0
-        \ nolist wrap completefunc= omnifunc=
+        \ nolist wrap completefunc=DictionaryComplete omnifunc=
         \ filetype=dictionary
 endfunction
 
@@ -95,8 +95,12 @@ function! s:initdict()
         \ 'jump_history': [], 'jump_history_index': 0 }
 endfunction
 
+function! DictionaryComplete(findstart, base)
+  return a:findstart ? -1 : []
+endfunction
+
 function! s:update()
-  setlocal completefunc= omnifunc=
+  setlocal completefunc=DictionaryComplete omnifunc=
   let word = getline(1)
   if exists('b:dictionary.proc')
     call s:check()
