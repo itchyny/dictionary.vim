@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/09/07 18:39:08.
+" Last Change: 2013/09/07 18:39:19.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -316,7 +316,7 @@ function! s:error(msg)
 endfunction
 
 function! s:check_mac()
-  if !(has('mac') || has('macunix') || has('guimacvim'))
+  if !(has('mac') || has('macunix') || has('guimacvim') || system('uname') =~? '^darwin')
     call s:error('Mac is required.')
     return 1
   endif
