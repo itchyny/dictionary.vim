@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/08/31 02:05:15.
+" Last Change: 2013/09/07 18:39:08.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -32,7 +32,8 @@ function! dictionary#new(args)
   if s:check_exe() | call s:check_vimproc() | return | endif
   if s:check_vimproc() | return | endif
   let [isnewbuffer, command, words] = s:parse(a:args)
-  try | silent execute command | catch | return | endtry
+  try | silent! execute command | catch | return | endtry
+  silent! noautocmd edit `='[dictionary]'`
   call setline(1, join(words, ' '))
   call cursor(1, 1)
   startinsert!
