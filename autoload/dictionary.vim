@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/10/06 05:00:54.
+" Last Change: 2013/10/06 09:08:58.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -33,7 +33,7 @@ function! dictionary#new(args)
   if s:check_vimproc() | return | endif
   let [isnewbuffer, command, words] = s:parse(a:args)
   try | silent! execute command | catch | return | endtry
-  silent! edit `='[dictionary]'`
+  silent! edit `=s:buffername('dictionary')`
   call setline(1, join(words, ' '))
   call cursor(1, 1)
   startinsert!
@@ -134,6 +134,19 @@ function! dictionary#complete(arglead, cmdline, cursorpos)
   catch
     return s:options
   endtry
+endfunction
+
+function! s:buffername(name)
+  let buflist = []
+  for i in range(tabpagenr('$'))
+   call extend(buflist, tabpagebuflist(i + 1))
+  endfor
+  let matcher = 'bufname(v:val) =~# ("\\[" . a:name . "\\( \\d\\+\\)\\?\\]") && index(buflist, v:val) >= 0'
+  let substituter = 'substitute(bufname(v:val), ".*\\(\\d\\+\\).*", "\\1", "") + 0'
+  let bufs = map(filter(range(1, bufnr('$')), matcher), substituter)
+  let index = 0
+  while index(bufs, index) >= 0 | let index += 1 | endwhile
+  return '[' . a:name . (len(bufs) && index ? ' ' . index : '') . ']'
 endfunction
 
 function! s:au()
