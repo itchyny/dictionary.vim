@@ -4,7 +4,7 @@ Version: 0.0
 Author: itchyny (https://github.com/itchyny)
 License: MIT License
 Repository: https://github.com/itchyny/dictionary.vim
-Last Change: 2013/10/11 05:04:41.
+Last Change: 2013/10/11 05:05:25.
 
 CONTENTS					*dictionary-contents*
 
@@ -133,6 +133,7 @@ CHANGELOG					*dictionary-changelog*
 	- Remove noautocmd
 	- Improve the buffer's name
 	- Improve buffer initialization
+	- Add '-no-duplicate'
 
 ==============================================================================
 vim:tw=78:sw=4:ts=8:ft=help:norl:noet:
