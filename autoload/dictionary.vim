@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/10/06 09:08:58.
+" Last Change: 2013/10/11 04:59:39.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -32,8 +32,7 @@ function! dictionary#new(args)
   if s:check_exe() | call s:check_vimproc() | return | endif
   if s:check_vimproc() | return | endif
   let [isnewbuffer, command, words] = s:parse(a:args)
-  try | silent! execute command | catch | return | endtry
-  silent! edit `=s:buffername('dictionary')`
+  try | silent execute command | catch | return | endtry
   call setline(1, join(words, ' '))
   call cursor(1, 1)
   startinsert!
@@ -46,13 +45,24 @@ function! dictionary#new(args)
         \ filetype=dictionary
 endfunction
 
+function! s:search_buffer()
+  let bufs = filter(tabpagebuflist(), "bufname(v:val) =~ \"[dictionary\"")
+  if len(bufs)
+    return { 'command': bufwinnr(bufs[0]) . 'wincmd w' }
+  else
+    return {}
+  endif
+endfunction
+
 function! s:parse(args)
   let args = split(a:args, '\s\+')
   let isnewbuffer = bufname('%') != '' || &l:filetype != '' || &modified
         \ || winheight(0) > 9 * &lines / 10
+  let name = " `=s:buffername('dictionary')`"
   let command = 'new'
   let below = ''
   let words = []
+  let addname = 1
   for arg in args
     if arg =~? '^-*horizontal$'
       let command = 'new'
@@ -61,9 +71,10 @@ function! s:parse(args)
       let command = 'vnew'
       let isnewbuffer = 1
     elseif arg =~? '^-*here$'
-      let command = 'try | enew | catch | tabnew | endtry'
+      let command = 'try | edit' . name . ' | catch | new' . name . ' | endtry'
+      let addname = 0
     elseif arg =~? '^-*here!$'
-      let command = 'enew!'
+      let command = 'edit!'
     elseif arg =~? '^-*newtab$'
       let command = 'tabnew'
       let isnewbuffer = 1
@@ -72,18 +83,22 @@ function! s:parse(args)
         let command = 'new'
       endif
       let below = 'below '
+    elseif arg =~? '^-*search$'
+      let command = get(s:search_buffer(), 'command', command)
     elseif arg =~? '^-*cursor-word$'
       let words = [s:cursorword()]
     else
       call add(words, arg)
     endif
   endfor
-  let command = 'if isnewbuffer | ' . below . command . ' | endif'
+  let cmd1 = below . command . (addname ? name : '')
+  let cmd2 = 'edit' . name
+  let command = 'if isnewbuffer | ' . cmd1 . ' | else | ' . cmd2 . '| endif'
   return [isnewbuffer, command, words]
 endfunction
 
 let s:options = [ '-horizontal', '-vertical', '-here', '-newtab', '-below',
-      \ '-cursor-word' ]
+      \ '-search', '-cursor-word' ]
 let s:noconflict = [
       \ [ '-horizontal', '-vertical', '-here', '-newtab' ],
       \ [ '-here', '-below' ],
