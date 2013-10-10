@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/10/11 05:01:41.
+" Last Change: 2013/10/11 08:30:39.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -46,7 +46,7 @@ function! dictionary#new(args)
 endfunction
 
 function! s:search_buffer()
-  let bufs = filter(tabpagebuflist(), "bufname(v:val) =~ \"[dictionary\"")
+  let bufs = filter(tabpagebuflist(), "getbufvar(v:val, '&ft') ==# 'dictionary'")
   if len(bufs)
     return { 'command': bufwinnr(bufs[0]) . 'wincmd w' }
   else
@@ -85,6 +85,8 @@ function! s:parse(args)
       let below = 'below '
     elseif arg =~? '^-*no-duplicate$'
       let command = get(s:search_buffer(), 'command', command)
+      let addname = command !~# 'wincmd'
+      let isnewbuffer = 1
     elseif arg =~? '^-*cursor-word$'
       let words = [s:cursorword()]
     else
