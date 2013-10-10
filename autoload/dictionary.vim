@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/10/11 04:59:39.
+" Last Change: 2013/10/11 05:01:41.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -83,7 +83,7 @@ function! s:parse(args)
         let command = 'new'
       endif
       let below = 'below '
-    elseif arg =~? '^-*search$'
+    elseif arg =~? '^-*no-duplicate$'
       let command = get(s:search_buffer(), 'command', command)
     elseif arg =~? '^-*cursor-word$'
       let words = [s:cursorword()]
@@ -98,7 +98,7 @@ function! s:parse(args)
 endfunction
 
 let s:options = [ '-horizontal', '-vertical', '-here', '-newtab', '-below',
-      \ '-search', '-cursor-word' ]
+      \ '-no-duplicate', '-cursor-word' ]
 let s:noconflict = [
       \ [ '-horizontal', '-vertical', '-here', '-newtab' ],
       \ [ '-here', '-below' ],

@@ -4,7 +4,7 @@ Version: 0.0
 Author: itchyny (https://github.com/itchyny)
 License: MIT License
 Repository: https://github.com/itchyny/dictionary.vim
-Last Change: 2013/10/11 04:57:34.
+Last Change: 2013/10/11 05:04:41.
 
 CONTENTS					*dictionary-contents*
 
@@ -58,6 +58,11 @@ You can specify some options to modify the appearance of the dictionary buffer.
 		Open the dictionary buffer in a new tab. When this option is
 		set, it opens a new tab even when the current buffer is a
 		unnamed buffer with no text.
+
+						*dictionary-options-no-duplicate*
+		-no-duplicate
+		Search the dictionary buffer in the current tab, and enter the
+		buffer if found.
 
 						*dictionary-options-cursor-word*
 		-cursor-word
