@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/10/11 08:30:39.
+" Last Change: 2014/03/16 00:29:42.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -371,10 +371,12 @@ function! s:check_exe()
 endfunction
 
 function! s:check_vimproc()
-  if !exists('*vimproc#pgroup_open')
+  try
+    call vimproc#version()
+  catch
     call s:error('vimproc is not found.')
     return 1
-  endif
+  endtry
   return 0
 endfunction
 
