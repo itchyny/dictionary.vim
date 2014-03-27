@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2014/03/27 23:05:28.
+// Last Change: 2014/03/27 23:26:45.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -12,7 +12,7 @@
 #define isnum(x)\
   (('0' <= x && x <= '9'))
 #define isalpha(x)\
-  (('a' <= x && x <= 'z'))
+  (('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z'))
 
 NSString* dictionary(char* searchword) {
   NSString* word = [NSString stringWithUTF8String:searchword];
@@ -112,11 +112,12 @@ int main(int argc, char *argv[]) {
       s[++j] = r[i];
     } else if (i + 3 < len && (r[i] == -30 && r[i + 1] == -111 && -97 < r[i + 2] && r[i + 2] < -76)) {
       s[j] = '\n';
+      s[++j] = ' ';
       s[++j] = r[i++];
       s[++j] = r[i++];
       s[++j] = r[i];
     } else if (i + 3 < len && !isalpha(r[i]) && isalpha(r[i + 1]) && r[i + 2] == '.') {
-      if (r[i + 1] == al + 1 || r[i + 1] == 'a') {
+      if (r[i + 1] == al + 1 || r[i + 1] == 'a' || r[i + 1] == 'A') {
         s[j++] = r[i];
         s[j++] = '\n';
         s[j] = ' ';
