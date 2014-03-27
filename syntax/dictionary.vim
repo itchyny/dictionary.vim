@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2013/06/30 00:59:33.
+" Last Change: 2014/03/27 18:40:09.
 " =============================================================================
 
 if version < 700
@@ -30,7 +30,7 @@ syntax match DictionaryGrammer '^\(noun\|adjective\|verb\|adverb\)$'
       \ containedin=DictionaryName
 syntax match DictionaryGrammerNoHead '\(noun\|adjective\|verb\|adverb\)'
       \ containedin=DictionaryGrammerLine contained
-syntax match DictionaryGrammerLine '^\(noun\|adjective\|verb\|adverb\).*$'
+syntax match DictionaryGrammerLine '^\(noun\|adjective\|verb\|adverb\).*$\|\(^\d\+ \)\@<=\S\+'
       \ containedin=DictionaryName
 syntax match DictionaryGrammer '^\(nombre\|adjetivo\|adverbio\|adeverbio\|pronombre\|verbo\).*$'
       \ containedin=DictionaryName
