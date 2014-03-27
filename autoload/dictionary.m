@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2013/07/11 14:45:21.
+// Last Change: 2014/03/27 18:18:46.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -80,85 +80,26 @@ int main(int argc, char *argv[]) {
   char* r = (char*)[result UTF8String];
   int len = strlen(r);
   if (len < 1) return 0;
-  char s[len + 3];
+  char s[len * 2];
   int i, j;
-  char lparen1[] = { -17, -67, -97 }; /* "｟";  */
-  char rparen1[] = { -17, -67, -96 }; /* "｠";  */
-  char dquot[] = { -30, -128, -99 }; /* "”"; */
-  char dots[] = { -30, -128, -90 }; /* "…"; */
-  char lparen2[] = { -17, -68, -120 }; /* "（"; */
-  char rparen2[] = { -17, -68, -119 }; /* "）"; */
-  char lparen3[] = { -29, -128, -104 }; /* "〘"; */
-  char rparen3[] = { -29, -128, -103 }; /* "〙"; */
-  char lkakko[] = { -29, -128, -116 }; /* "「"; */
-  char rkakko[] = { -29, -128, -115 }; /* "」"; */
-  char dot[] =  { -30, -128, -94 }; /* "•"; */
-  char huku[] =  { -24, -92, -121 }; /* "複"; */
-  char nami[] =  { -17, -67, -98 }; /* "〜"; */
+  char nr1[] = { -30, -106, -72 };
+  char nr2[] = { -30, -106, -74 };
+  char nr3[] = { -30, -128, -94 };
   for (i = j = 0; i < len; ++i, ++j) {
-    /* s[j] = r[i]; continue; */
-    if (r[i] == '\n') {
-      if (i + 3 < len) {
-        if (r[i + 2] == '\n' && (r[i + 1] > 'Z' || r[i + 1] < 'A')) {
-          s[j] = r[++i];
-          if (r[i] == '/') ++i;
-        } else if (r[i + 1] == '/') {
-          s[j] = ' ';
-          s[++j] = r[++i];
-        } else if (r[i + 3] == '\n' && r[i + 2] == ' ') {
-          if (r[i + 1] == ';' || r[i + 1] == ',' || r[i + 1] == ')') {
-            s[j] = r[++i];
-            s[++j] = r[++i];
-          } else if (r[i + 1] == '.') {
-            s[j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
-          } else {
-            s[j] = r[i];
-          }
-        } else if (eq3(r, lparen1) && r[i + 4] == '\n' &&
-            !(j > 2 && s[j - 1] == ' ' && '0' < s[j - 2] && s[j - 2] <= '9')) {
-          s[j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i]; ++i;
-        } else if (eq3(r, dquot)) {
-          s[j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
-        } else if (eq3(r, lparen2) || eq3(r, rparen2) || eq3(r, rparen1)) {
-          s[j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
-          if (r[i + 1] == '\n') ++i;
-        } else if ((eq3(r, lparen3) || eq3(r, rparen3)) && j > 2 &&
-                  !(s[j - 1] >= 'A' && s[j - 1] <= 'Z' && s[j - 2] == '\n') &&
-                  !(s[j - 1] == ' ' && s[j - 2] >= '0' && s[j - 2] <= '9')) {
-          s[j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
-          if (r[i + 1] == '\n') ++i;
-        } else if (eq3(r, lkakko) && eq3(r + 3, rkakko)) {
-          i += 6; --j;
-        } else if (j > 2 && s[j - 1] == ' ' && 
-            (s[j - 2] == ',' || (s[j - 2] == ';' && s[j - 3] != '/')) &&
-            !(r[i + 1] >= 'A' && r[i + 1] <= 'Z' && r[i + 2] == '\n')) {
-          --j;
-        } else if (j > 3 && (eq3neg(s, dots) || eq3neg(s, rparen2))) {
-          --j;
-        } else if (r[i + 1] == ',' && r[i + 2] == ' ') {
-          s[j] = r[++i]; s[++j] = r[++i];
-        } else if (eq3(r, dot)) {
-          if (r[i + 4] == ' ' && r[i + 5] == '\n') ++i;
-          i += 3; --j;
-        } else if (eq3(r, huku) && r[i + 4] == '\n' &&
-                  (eq3(r + 4, nami) || r[i + 5] == '-')) {
-          s[j] = r[i]; s[++j] = r[++i]; s[++j] = r[++i]; s[++j] = r[++i];
-          s[++j] = ' '; ++i;
-        } else if ((r[i + 1] == 'U' || r[i + 1] == 'C') && r[i + 2] == '\n'
-                && (r[i + 3] == 'U' || r[i + 3] == 'C') && r[i + 4] == '\n') {
-          s[j] = r[i]; s[++j] = r[++i]; s[++j] = ' '; ++i; s[++j] = r[++i];
-        } else if (s[j - 1] == '(') {
-          --j;
-        } else if (r[i + 1] == ')') {
-          s[j] = r[++i];
-        } else {
-          s[j] = r[i];
-        }
-      } else if (i + 3 >= len) {
-        s[j] = r[++i];
-      } else {
-        s[j] = r[i];
-      }
+    if (i + 3 < len && ((r[i] == nr1[0] && r[i + 1] == nr1[1] && r[i + 2] == nr1[2]) ||
+                        (r[i] == nr2[0] && r[i + 1] == nr2[1] && r[i + 2] == nr2[2]))) {
+      s[j] = '\n';
+      i += 2;
+    } else if (i + 3 < len && ((r[i] == nr3[0] && r[i + 1] == nr3[1] && r[i + 2] == nr3[2]))) {
+      s[j] = '\n';
+      s[++j] = ' ';
+      s[++j] = r[i];
+      s[++j] = r[i + 1];
+      s[++j] = r[i + 2];
+      i += 2;
+    } else if (i + 2 < len && '0' <= r[i] && r[i] <= '9' && r[i + 1] == ' ') {
+      s[j++] = '\n';
+      s[j] = r[i];
     } else {
       s[j] = r[i];
     }
