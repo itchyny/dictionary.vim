@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2014/03/27 19:09:03.
+// Last Change: 2014/03/27 19:13:01.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -90,6 +90,7 @@ int main(int argc, char *argv[]) {
   char nr2[] = { -30, -106, -74 };
   char nr3[] = { -30, -128, -94 };
   int num = 0, newnum = 0;
+  char al = 'a';
   for (i = j = 0; i < len; ++i, ++j) {
     if (i + 3 < len && ((r[i] == nr1[0] && r[i + 1] == nr1[1] && r[i + 2] == nr1[2]) ||
                         (r[i] == nr2[0] && r[i + 1] == nr2[1] && r[i + 2] == nr2[2]) ||
@@ -102,9 +103,14 @@ int main(int argc, char *argv[]) {
       s[++j] = r[i + 2];
       i += 2;
     } else if (i + 3 < len && !isalpha(r[i]) && isalpha(r[i + 1]) && r[i + 2] == '.') {
-      s[j++] = r[i];
-      s[j++] = '\n';
-      s[j] = ' ';
+      if (r[i + 1] == al + 1 || r[i + 1] == 'a') {
+        s[j++] = r[i];
+        s[j++] = '\n';
+        s[j] = ' ';
+        al = r[i + 1];
+      } else {
+        s[j] = r[i];
+      }
     } else if (i + 3 < len && isnum(r[i]) && isnum(r[i + 1]) && r[i + 2] == ' ') {
       newnum = (r[i] - '0') * 10 + (r[i + 1] - '0');
       if (0 < newnum && (num < newnum || newnum < 2) && newnum <= num + 2) {
