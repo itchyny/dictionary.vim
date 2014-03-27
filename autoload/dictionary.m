@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2014/03/27 23:33:55.
+// Last Change: 2014/03/28 00:03:04.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -95,9 +95,9 @@ int main(int argc, char *argv[]) {
       s[j] = '\n';
       s[++j] = ' ';
       s[++j] = ' ';
-      s[++j] = r[i++];
-      s[++j] = r[i++];
       s[++j] = r[i];
+      s[++j] = r[++i];
+      s[++j] = r[++i];
     } else if (strncmp(r + i, nr2, 3) == 0) {
       s[j] = '\n';
       i += 2;
@@ -105,45 +105,46 @@ int main(int argc, char *argv[]) {
       s[j] = '\n';
       s[++j] = ' ';
       s[++j] = ' ';
-      s[++j] = r[i++];
-      s[++j] = r[i++];
-      s[++j] = r[i++];
-      s[++j] = r[i++];
       s[++j] = r[i];
+      s[++j] = r[++i];
+      s[++j] = r[++i];
+      s[++j] = r[++i];
+      s[++j] = r[++i];
     } else if (i + 3 < len && (r[i] == -30 && r[i + 1] == -111 && -97 < r[i + 2] && r[i + 2] < -76)) {
       s[j] = '\n';
       s[++j] = ' ';
-      s[++j] = r[i++];
-      s[++j] = r[i++];
       s[++j] = r[i];
+      s[++j] = r[++i];
+      s[++j] = r[++i];
     } else if (i + 3 < len && !isalpha(r[i]) && isalpha(r[i + 1]) && r[i + 2] == '.') {
       if (r[i + 1] == al + 1 || r[i + 1] == 'a' || r[i + 1] == 'A') {
-        s[j++] = r[i];
-        s[j++] = '\n';
-        s[j] = ' ';
-        al = r[i + 1];
+        s[j] = r[i];
+        s[++j] = '\n';
+        s[++j] = ' ';
+        al = s[++j] = r[++i];
+        s[++j] = r[++i];
       } else {
         s[j] = r[i];
       }
     } else if (strncmp(r + i, "DERIVATIVES", 11) == 0 ||
                strncmp(r + i, "PHRASES", 7) == 0 ||
                strncmp(r + i, "ORIGIN", 6) == 0) {
-      s[j++] = '\n';
-      s[j] = r[i];
+      s[j] = '\n';
+      s[++j] = r[i];
     } else if (i + 3 < len && isnum(r[i]) && isnum(r[i + 1]) && r[i + 2] == ' ' && 0 < i && !isnum(r[i - 1])) {
       newnum = (r[i] - '0') * 10 + (r[i + 1] - '0');
       if (0 < newnum && (num < newnum || newnum < 2) && newnum <= num + 2) {
-        s[j++] = '\n';
-        s[j++] = r[i++];
-        s[j] = r[i];
+        s[j] = '\n';
+        s[++j] = r[i];
+        s[++j] = r[++i];
         num = newnum;
       } else {
         s[j] = r[i];
       }
     } else if (r[i] == '/') {
       if (slash == 1 && i + 1 < len && r[i + 1] != '\n') {
-        s[j++] = r[i];
-        s[j] = '\n';
+        s[j] = r[i];
+        s[++j] = '\n';
       } else {
         s[j] = r[i];
       }
@@ -151,8 +152,8 @@ int main(int argc, char *argv[]) {
     } else if (i + 2 < len && isnum(r[i]) && r[i + 1] == ' ' && 0 < i && !isnum(r[i - 1])) {
       newnum = r[i] - '0';
       if (0 < newnum && (num < newnum || newnum < 2) && newnum <= num + 2) {
-        s[j++] = '\n';
-        s[j] = r[i];
+        s[j] = '\n';
+        s[++j] = r[i];
         num = newnum;
         if (i + 3 < len && (r[i + 2] == 'C' || r[i + 2] == 'U')) {
           s[++j] = r[++i];
