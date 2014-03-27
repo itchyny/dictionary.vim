@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2014/03/27 20:52:06.
+" Last Change: 2014/03/27 21:06:09.
 " =============================================================================
 
 if version < 700
@@ -26,11 +26,11 @@ syntax match DictionaryName '^\S\+\s*\n|.*|\s*$'
 syntax match DictionaryName '^\S\+\s*\n/.*/;\?'
       \ contains=DictionaryPronounceNoHead
 syntax match DictionaryGroup '^[A-Z][a-z]\+ $'
-syntax match DictionaryGrammer '^\(noun\|adjective\|verb\|adverb\)$'
+syntax match DictionaryGrammer '^\(\(pro\)\?noun\|adjective\|det\|verb\|adverb\|abbreviation\|preposition\|suffix\|prefix\|conjunction\|symb\)$'
       \ containedin=DictionaryName
-syntax match DictionaryGrammerNoHead '\(noun\|adjective\|verb\|adverb\)'
+syntax match DictionaryGrammerNoHead '\<\(\(pro\)\?noun\|adjective\|det\|verb\|adverb\|abbreviation\|preposition\|suffix\|prefix\|conjunction\|symb\)\>'
       \ containedin=DictionaryGrammerLine contained
-syntax match DictionaryGrammerLine '^\(noun\|adjective\|verb\|adverb\).*$\|\(^\d\+ \)\@<=[A-Z]\+'
+syntax match DictionaryGrammerLine '^\(\(pro\)\?noun\|adjective\|det\|verb\|adverb\|abbreviation\|preposition\|suffix\|prefix\|conjunction\|symb\)\>.*$\|\(^\d\+ \)\@<=[A-Z]\+\>'
       \ containedin=DictionaryName
 syntax match DictionaryGrammer '^\(nombre\|adjetivo\|adverbio\|adeverbio\|pronombre\|verbo\).*$'
       \ containedin=DictionaryName
@@ -46,7 +46,7 @@ syntax match DictionaryGrammerLine '^\(代\?名　\?詞\|形容詞\|[自他助]\
       \ containedin=DictionaryName
 syntax match DictionaryGrammer '^\(动\|介\|量\|数\|连\)$'
       \ containedin=DictionaryName
-syntax match DictionaryName '^\S\+\s*\n^\(noun\|adjective\|verb\|adverb\)\>'
+syntax match DictionaryName '^\S\+\s*\n^\(\(pro\)\?noun\|adjective\|det\|verb\|adverb\|abbreviation\|preposition\|suffix\|prefix\|conjunction\|symb\)\>'
       \ contains=DictionaryGrammer
 syntax match DictionaryName '^\(-\a\|～\|～́\|～̀\|複\).*\|^\a\+\s/\S\+/.*$'
       \ contains=DictionaryGrammer,DictionaryPronounceNoHead,DictionarySemicolon,DictionaryComment 
