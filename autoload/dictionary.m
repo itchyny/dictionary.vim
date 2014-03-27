@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2014/03/27 20:58:41.
+// Last Change: 2014/03/27 21:17:54.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -89,6 +89,7 @@ int main(int argc, char *argv[]) {
   char nr3[] = { -30, -128, -94 };
   int num = 0, newnum = 0;
   char al = 'a';
+  char C = 0, U = 0;
   for (i = j = 0; i < len; ++i, ++j) {
     if (i + 3 < len && (eq3(r, nr1) || eq3(r, nr3))) {
       s[j] = '\n';
@@ -137,6 +138,16 @@ int main(int argc, char *argv[]) {
         s[j++] = '\n';
         s[j] = r[i];
         num = newnum;
+        if (i + 3 < len && (r[i + 2] == 'C' || r[i + 2] == 'U')) {
+          s[++j] = r[++i];
+          C = U = 1;
+          while ((C && r[i + 1] == 'C') || (U && r[i + 1] == 'U')) {
+            s[++j] = r[++i];
+            if (r[i] == 'C') C = 0;
+            if (r[i] == 'U') U = 0;
+          }
+          s[++j] = ' ';
+        }
       } else {
         s[j] = r[i];
       }
