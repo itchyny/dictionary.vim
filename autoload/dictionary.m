@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2014/03/27 22:38:51.
+// Last Change: 2014/03/27 23:05:28.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -85,6 +85,8 @@ int main(int argc, char *argv[]) {
   char nr1[] = { -30, -106, -72 };
   char nr2[] = { -30, -106, -74 };
   char nr3[] = { -30, -128, -94 };
+  char nr4[] = { -17, -67, -98, -52, -127 };
+  char nr5[] = { -17, -67, -98, -52, -128 };
   int num = 0, newnum = 0;
   char al = 'a';
   char C = 0, U = 0, slash = 0;
@@ -93,19 +95,26 @@ int main(int argc, char *argv[]) {
       s[j] = '\n';
       s[++j] = ' ';
       s[++j] = ' ';
+      s[++j] = r[i++];
+      s[++j] = r[i++];
       s[++j] = r[i];
-      s[++j] = r[i + 1];
-      s[++j] = r[i + 2];
-      i += 2;
     } else if (strncmp(r + i, nr2, 3) == 0) {
       s[j] = '\n';
       i += 2;
+    } else if (strncmp(r + i, nr4, 5) == 0 || strncmp(r + i, nr5, 5) == 0) {
+      s[j] = '\n';
+      s[++j] = ' ';
+      s[++j] = ' ';
+      s[++j] = r[i++];
+      s[++j] = r[i++];
+      s[++j] = r[i++];
+      s[++j] = r[i++];
+      s[++j] = r[i];
     } else if (i + 3 < len && (r[i] == -30 && r[i + 1] == -111 && -97 < r[i + 2] && r[i + 2] < -76)) {
       s[j] = '\n';
+      s[++j] = r[i++];
+      s[++j] = r[i++];
       s[++j] = r[i];
-      s[++j] = r[i + 1];
-      s[++j] = r[i + 2];
-      i += 2;
     } else if (i + 3 < len && !isalpha(r[i]) && isalpha(r[i + 1]) && r[i + 2] == '.') {
       if (r[i + 1] == al + 1 || r[i + 1] == 'a') {
         s[j++] = r[i];
