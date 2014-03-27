@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2014/03/27 18:23:43.
+// Last Change: 2014/03/27 18:32:59.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -13,6 +13,8 @@
   (*((x)+i+1)==y[0] && *((x)+i+2)==y[1] && *((x)+i+3)==y[2])
 #define eq3neg(x,y)\
   (*((x)+j-1)==y[2] && *((x)+j-2)==y[1] && *((x)+j-3)==y[0])
+#define isnum(x)\
+  (('0' <= x && x <= '9'))
 
 NSString* dictionary(char* searchword) {
   NSString* word = [NSString stringWithUTF8String:searchword];
@@ -95,7 +97,11 @@ int main(int argc, char *argv[]) {
       s[++j] = r[i + 1];
       s[++j] = r[i + 2];
       i += 2;
-    } else if (i + 2 < len && '0' <= r[i] && r[i] <= '9' && r[i + 1] == ' ') {
+    } else if (i + 3 < len && isnum(r[i]) && isnum(r[i + 1]) && r[i + 2] == ' ') {
+      s[j++] = '\n';
+      s[j++] = r[i++];
+      s[j] = r[i];
+    } else if (i + 2 < len && isnum(r[i]) && r[i + 1] == ' ') {
       s[j++] = '\n';
       s[j] = r[i];
     } else {
