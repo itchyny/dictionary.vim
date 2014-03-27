@@ -3,16 +3,14 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2014/03/27 19:13:01.
+// Last Change: 2014/03/27 20:58:41.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
 #import <CoreServices/CoreServices.h>
 
 #define eq3(x,y)\
-  (*((x)+i+1)==y[0] && *((x)+i+2)==y[1] && *((x)+i+3)==y[2])
-#define eq3neg(x,y)\
-  (*((x)+j-1)==y[2] && *((x)+j-2)==y[1] && *((x)+j-3)==y[0])
+  (*((x)+i)==y[0] && *((x)+i+1)==y[1] && *((x)+i+2)==y[2])
 #define isnum(x)\
   (('0' <= x && x <= '9'))
 #define isalpha(x)\
@@ -92,12 +90,19 @@ int main(int argc, char *argv[]) {
   int num = 0, newnum = 0;
   char al = 'a';
   for (i = j = 0; i < len; ++i, ++j) {
-    if (i + 3 < len && ((r[i] == nr1[0] && r[i + 1] == nr1[1] && r[i + 2] == nr1[2]) ||
-                        (r[i] == nr2[0] && r[i + 1] == nr2[1] && r[i + 2] == nr2[2]) ||
-                        (r[i] == nr3[0] && r[i + 1] == nr3[1] && r[i + 2] == nr3[2]))) {
+    if (i + 3 < len && (eq3(r, nr1) || eq3(r, nr3))) {
       s[j] = '\n';
       s[++j] = ' ';
       s[++j] = ' ';
+      s[++j] = r[i];
+      s[++j] = r[i + 1];
+      s[++j] = r[i + 2];
+      i += 2;
+    } else if (i + 3 < len && eq3(r, nr2)) {
+      s[j] = '\n';
+      i += 2;
+    } else if (i + 3 < len && (r[i] == -30 && r[i + 1] == -111 && -97 < r[i + 2] && r[i + 2] < -76)) {
+      s[j] = '\n';
       s[++j] = r[i];
       s[++j] = r[i + 1];
       s[++j] = r[i + 2];
@@ -111,6 +116,11 @@ int main(int argc, char *argv[]) {
       } else {
         s[j] = r[i];
       }
+    } else if (strncmp((r + i), "DERIVATIVES", 11) == 0 ||
+               strncmp((r + i), "PHRASES", 7) == 0 ||
+               strncmp((r + i), "ORIGIN", 6) == 0) {
+      s[j++] = '\n';
+      s[j] = r[i];
     } else if (i + 3 < len && isnum(r[i]) && isnum(r[i + 1]) && r[i + 2] == ' ') {
       newnum = (r[i] - '0') * 10 + (r[i + 1] - '0');
       if (0 < newnum && (num < newnum || newnum < 2) && newnum <= num + 2) {
