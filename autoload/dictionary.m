@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2014/03/27 19:00:32.
+// Last Change: 2014/03/27 19:01:54.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -94,6 +94,7 @@ int main(int argc, char *argv[]) {
                         (r[i] == nr2[0] && r[i + 1] == nr2[1] && r[i + 2] == nr2[2]) ||
                         (r[i] == nr3[0] && r[i + 1] == nr3[1] && r[i + 2] == nr3[2]))) {
       s[j] = '\n';
+      s[++j] = ' ';
       s[++j] = ' ';
       s[++j] = r[i];
       s[++j] = r[i + 1];
