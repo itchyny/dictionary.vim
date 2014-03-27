@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2014/03/27 23:26:45.
+// Last Change: 2014/03/27 23:33:55.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -130,7 +130,7 @@ int main(int argc, char *argv[]) {
                strncmp(r + i, "ORIGIN", 6) == 0) {
       s[j++] = '\n';
       s[j] = r[i];
-    } else if (i + 3 < len && isnum(r[i]) && isnum(r[i + 1]) && r[i + 2] == ' ') {
+    } else if (i + 3 < len && isnum(r[i]) && isnum(r[i + 1]) && r[i + 2] == ' ' && 0 < i && !isnum(r[i - 1])) {
       newnum = (r[i] - '0') * 10 + (r[i + 1] - '0');
       if (0 < newnum && (num < newnum || newnum < 2) && newnum <= num + 2) {
         s[j++] = '\n';
@@ -148,7 +148,7 @@ int main(int argc, char *argv[]) {
         s[j] = r[i];
       }
       slash++;
-    } else if (i + 2 < len && isnum(r[i]) && r[i + 1] == ' ') {
+    } else if (i + 2 < len && isnum(r[i]) && r[i + 1] == ' ' && 0 < i && !isnum(r[i - 1])) {
       newnum = r[i] - '0';
       if (0 < newnum && (num < newnum || newnum < 2) && newnum <= num + 2) {
         s[j++] = '\n';
