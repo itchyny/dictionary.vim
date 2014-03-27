@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2014/03/27 18:18:46.
+// Last Change: 2014/03/27 18:23:43.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -87,10 +87,8 @@ int main(int argc, char *argv[]) {
   char nr3[] = { -30, -128, -94 };
   for (i = j = 0; i < len; ++i, ++j) {
     if (i + 3 < len && ((r[i] == nr1[0] && r[i + 1] == nr1[1] && r[i + 2] == nr1[2]) ||
-                        (r[i] == nr2[0] && r[i + 1] == nr2[1] && r[i + 2] == nr2[2]))) {
-      s[j] = '\n';
-      i += 2;
-    } else if (i + 3 < len && ((r[i] == nr3[0] && r[i + 1] == nr3[1] && r[i + 2] == nr3[2]))) {
+                        (r[i] == nr2[0] && r[i + 1] == nr2[1] && r[i + 2] == nr2[2]) ||
+                        (r[i] == nr3[0] && r[i + 1] == nr3[1] && r[i + 2] == nr3[2]))) {
       s[j] = '\n';
       s[++j] = ' ';
       s[++j] = r[i];
