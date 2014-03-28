@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2014/03/28 00:03:04.
+// Last Change: 2014/03/28 09:45:08.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -138,6 +138,16 @@ int main(int argc, char *argv[]) {
         s[++j] = r[i];
         s[++j] = r[++i];
         num = newnum;
+        if (i + 3 < len && (r[i + 2] == 'C' || r[i + 2] == 'U')) {
+          s[++j] = r[++i];
+          C = U = 1;
+          while ((C && r[i + 1] == 'C') || (U && r[i + 1] == 'U')) {
+            s[++j] = r[++i];
+            if (r[i] == 'C') C = 0;
+            if (r[i] == 'U') U = 0;
+          }
+          s[++j] = ' ';
+        }
       } else {
         s[j] = r[i];
       }
