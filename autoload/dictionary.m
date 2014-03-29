@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2014/03/28 09:45:08.
+// Last Change: 2014/03/29 17:19:33.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -87,9 +87,12 @@ int main(int argc, char *argv[]) {
   char nr3[] = { -30, -128, -94 };
   char nr4[] = { -17, -67, -98, -52, -127 };
   char nr5[] = { -17, -67, -98, -52, -128 };
+  char paren1[] = { -29, -128, -106 };
+  char paren2[] = { -29, -128, -105 };
   int num = 0, newnum = 0;
   char al = 'a';
   char C = 0, U = 0, slash = 0;
+  char paren = 1;
   for (i = j = 0; i < len; ++i, ++j) {
     if (strncmp(r + i, nr1, 3) == 0 || strncmp(r + i, nr3, 3) == 0) {
       s[j] = '\n';
@@ -134,9 +137,13 @@ int main(int argc, char *argv[]) {
     } else if (i + 3 < len && isnum(r[i]) && isnum(r[i + 1]) && r[i + 2] == ' ' && 0 < i && !isnum(r[i - 1])) {
       newnum = (r[i] - '0') * 10 + (r[i + 1] - '0');
       if (0 < newnum && (num < newnum || newnum < 2) && newnum <= num + 2) {
-        s[j] = '\n';
-        s[++j] = r[i];
-        s[++j] = r[++i];
+        if (j > 1 && s[j - 1] != '\n') {
+          s[j] = '\n';
+          s[++j] = r[i];
+          s[++j] = r[++i];
+        } else {
+          s[j] = r[i];
+        }
         num = newnum;
         if (i + 3 < len && (r[i + 2] == 'C' || r[i + 2] == 'U')) {
           s[++j] = r[++i];
@@ -162,8 +169,12 @@ int main(int argc, char *argv[]) {
     } else if (i + 2 < len && isnum(r[i]) && r[i + 1] == ' ' && 0 < i && !isnum(r[i - 1])) {
       newnum = r[i] - '0';
       if (0 < newnum && (num < newnum || newnum < 2) && newnum <= num + 2) {
-        s[j] = '\n';
-        s[++j] = r[i];
+        if (j > 1 && s[j - 1] != '\n') {
+          s[j] = '\n';
+          s[++j] = r[i];
+        } else {
+          s[j] = r[i];
+        }
         num = newnum;
         if (i + 3 < len && (r[i + 2] == 'C' || r[i + 2] == 'U')) {
           s[++j] = r[++i];
@@ -178,6 +189,17 @@ int main(int argc, char *argv[]) {
       } else {
         s[j] = r[i];
       }
+    } else if (!num && paren && strncmp(r + i, paren1, 3) == 0 && j > 1 && s[j - 1] != '\n') {
+      s[j] = '\n';
+      s[++j] = r[i];
+      s[++j] = r[++i];
+      s[++j] = r[++i];
+    } else if (!num && paren && strncmp(r + i, paren2, 3) == 0) {
+      s[j] = r[i];
+      s[++j] = r[++i];
+      s[++j] = r[++i];
+      s[++j] = '\n';
+      paren = 0;
     } else {
       s[j] = r[i];
     }
