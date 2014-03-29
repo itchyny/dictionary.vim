@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2014/03/29 17:19:33.
+// Last Change: 2014/03/29 21:15:30.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -13,6 +13,8 @@
   (('0' <= x && x <= '9'))
 #define isalpha(x)\
   (('a' <= x && x <= 'z') || ('A' <= x && x <= 'Z'))
+#define tolower(x)\
+  (('A' <= x && x <= 'Z') ? ((x) - ('A' - 'a')) : (x))
 
 NSString* dictionary(char* searchword) {
   NSString* word = [NSString stringWithUTF8String:searchword];
@@ -60,7 +62,8 @@ NSString* suggest(char* w) {
 }
 
 int main(int argc, char *argv[]) {
-  if (argc < 2 || strlen(argv[1]) == 0) return 0;
+  int arglen = strlen(argv[1]);
+  if (argc < 2 || arglen == 0) return 0;
   NSString* result = dictionary(argv[1]);
   if (result == nil) {
     int i, l;
@@ -89,11 +92,32 @@ int main(int argc, char *argv[]) {
   char nr5[] = { -17, -67, -98, -52, -128 };
   char paren1[] = { -29, -128, -106 };
   char paren2[] = { -29, -128, -105 };
+  char paren3[] = { -29, -128, -104 };
   int num = 0, newnum = 0;
   char al = 'a';
   char C = 0, U = 0, slash = 0;
   char paren = 1;
-  for (i = j = 0; i < len; ++i, ++j) {
+  i = j = 0;
+  if (arglen + 9 < len) {
+    char flg = 1;
+    for (i = 0; i < arglen; ++i) {
+      if (tolower(r[i]) != tolower(argv[1][i])) {
+        flg = 0; break;
+      }
+    }
+    if (flg) {
+      if (r[i] == '.' || strncmp(r + i, paren3, 3) == 0 || isnum(r[i])) {
+        for (i = 0; i < arglen + (r[i] == '.'); ++i)
+          s[j++] = r[i];
+        s[j++] = '\n';
+      } else {
+        i = j = 0;
+      }
+    } else {
+      i = j = 0;
+    }
+  }
+  for ( ; i < len; ++i, ++j) {
     if (strncmp(r + i, nr1, 3) == 0 || strncmp(r + i, nr3, 3) == 0) {
       s[j] = '\n';
       s[++j] = ' ';
