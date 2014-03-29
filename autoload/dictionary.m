@@ -3,7 +3,7 @@
 // Version: 0.0
 // Author: itchyny
 // License: MIT License
-// Last Change: 2014/03/29 21:15:30.
+// Last Change: 2014/03/30 00:28:37.
 // ============================================================================
 
 #import <Foundation/Foundation.h>
@@ -97,6 +97,7 @@ int main(int argc, char *argv[]) {
   char al = 'a';
   char C = 0, U = 0, slash = 0;
   char paren = 1;
+  char firstparen = 1;
   i = j = 0;
   if (arglen + 9 < len) {
     char flg = 1;
@@ -106,7 +107,7 @@ int main(int argc, char *argv[]) {
       }
     }
     if (flg) {
-      if (r[i] == '.' || strncmp(r + i, paren3, 3) == 0 || isnum(r[i])) {
+      if (r[i] == '.' || strncmp(r + i, paren3, 3) == 0) {
         for (i = 0; i < arglen + (r[i] == '.'); ++i)
           s[j++] = r[i];
         s[j++] = '\n';
@@ -183,7 +184,7 @@ int main(int argc, char *argv[]) {
         s[j] = r[i];
       }
     } else if (r[i] == '/') {
-      if (slash == 1 && i + 1 < len && r[i + 1] != '\n') {
+      if (slash == 1 && i + 1 < len && r[i + 1] != '\n' && firstparen != 2) {
         s[j] = r[i];
         s[++j] = '\n';
       } else {
@@ -224,6 +225,16 @@ int main(int argc, char *argv[]) {
       s[++j] = r[++i];
       s[++j] = '\n';
       paren = 0;
+    } else if (firstparen == 1 && r[i] == '(') {
+      s[j] = r[i];
+      firstparen = 2;
+    } else if (firstparen == 2 && r[i] == ')') {
+      s[j] = r[i];
+      if (i + 1 < len && r[i + 1] == ' ') {
+        s[++j] = '\n';
+        ++i;
+      }
+      firstparen = 0;
     } else {
       s[j] = r[i];
     }
