@@ -27,12 +27,12 @@ This software is released under the MIT License, see LICENSE.
 4. Put autoload/dictionary.m to $VIM/autoload/.
 5. Put doc/dictionary.txt to $VIM/doc/.
 
-### Vundle (https://github.com/gmarik/vundle)
+### Vundle (https://github.com/gmarik/Vundle.vim)
 1. Add the following configuration to your .vimrc.
 
-        Bundle 'itchyny/dictionary.vim'
+        Plugin 'itchyny/dictionary.vim'
 
-2. Install with `:BundleInstall`.
+2. Install with `:PluginInstall`.
 
 ### NeoBundle (https://github.com/Shougo/neobundle.vim)
 1. Add the following configuration to your .vimrc.
