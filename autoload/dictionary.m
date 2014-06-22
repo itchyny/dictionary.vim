@@ -120,7 +120,8 @@ int main(int argc, char *argv[]) {
   }
   for ( ; i < len; ++i, ++j) {
     if (strncmp(r + i, nr1, 3) == 0 || strncmp(r + i, nr3, 3) == 0) {
-      s[j] = '\n';
+      if (j && s[j - 1] == '\n') --j;
+      else s[j] = '\n';
       s[++j] = ' ';
       s[++j] = ' ';
       s[++j] = r[i];
