@@ -3,8 +3,10 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2014/03/27 23:23:36.
+" Last Change: 2014/11/18 14:20:32.
 " =============================================================================
+
+scriptencoding utf-8
 
 if version < 700
   syntax clear
