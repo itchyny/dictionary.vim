@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2014/11/18 14:20:32.
+" Last Change: 2014/12/09 08:16:41.
 " =============================================================================
 
 scriptencoding utf-8
@@ -13,6 +13,9 @@ if version < 700
 elseif exists('b:current_syntax')
   finish
 endif
+
+let s:save_cpo = &cpo
+set cpo&vim
 
 syntax region DictionaryName start='\%2l' end='$'
       \ keepend contains=DictionaryPronounceNoHead
@@ -67,3 +70,5 @@ highlight default link DictionarySemicolon Normal
 
 let b:current_syntax = 'dictionary'
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
