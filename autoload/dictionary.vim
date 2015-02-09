@@ -3,7 +3,7 @@
 " Version: 0.0
 " Author: itchyny
 " License: MIT License
-" Last Change: 2014/03/16 00:29:42.
+" Last Change: 2014/12/07 20:21:59.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -265,6 +265,8 @@ function! s:map()
   if &l:filetype ==# 'dictionary'
     return
   endif
+  let save_cpo = &cpo
+  set cpo&vim
   nnoremap <buffer><silent> <Plug>(dictionary_jump)
         \ :<C-u>call <SID>jump()<CR>
   nnoremap <buffer><silent> <Plug>(dictionary_jump_back)
@@ -277,6 +279,7 @@ function! s:map()
   nmap <buffer> <C-t> <Plug>(dictionary_jump_back)
   nmap <buffer> q <Plug>(dictionary_exit)
   imap <buffer> <CR> <Plug>(dictionary_nop)
+  let &cpo = save_cpo
 endfunction
 
 function! s:with(word)
