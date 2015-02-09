@@ -4,7 +4,7 @@ Version: 0.0
 Author: itchyny (https://github.com/itchyny)
 License: MIT License
 Repository: https://github.com/itchyny/dictionary.vim
-Last Change: 2013/10/11 05:05:25.
+Last Change: 2015/01/06 22:53:45.
 
 CONTENTS					*dictionary-contents*
 
@@ -48,7 +48,7 @@ You can specify some options to modify the appearance of the dictionary buffer.
 
 						*dictionary-options-here*
 		-here[!]
-		Open the thumbnail buffer at the same window of the current
+		Open the dictionary buffer at the same window of the current
 		buffer. If some changes exist in the current buffer, this
 		option is ignored. An '!' is added to discard any changes in
 		the current buffer.
@@ -111,13 +111,13 @@ q		|<Plug>(dictionary_exit)|
 
 Insert mode key mappings.
 
-<Plug>(thumbnail_nop)				*i_<Plug>(dictionary_nop)*
+<Plug>(dictionary_nop)				*i_<Plug>(dictionary_nop)*
 		Nothing.
 
 Insert mode default mappings in dictionary buffers.
 {lhs}		{rhs}
 --------	-----------------------
-<CR>		|i_<Plug>(thumbnail_nop)|
+<CR>		|i_<Plug>(dictionary_nop)|
 
 ==============================================================================
 CHANGELOG					*dictionary-changelog*
