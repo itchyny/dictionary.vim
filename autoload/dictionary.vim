@@ -1,6 +1,5 @@
 " =============================================================================
 " Filename: autoload/dictionary.vim
-" Version: 0.0
 " Author: itchyny
 " License: MIT License
 " Last Change: 2014/12/07 20:21:59.

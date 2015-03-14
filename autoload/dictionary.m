@@ -1,6 +1,5 @@
 // ============================================================================
 // Filename: plugin/dictionary.m
-// Version: 0.0
 // Author: itchyny
 // License: MIT License
 // Last Change: 2014/11/25 08:07:43.

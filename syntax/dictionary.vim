@@ -1,6 +1,5 @@
 " =============================================================================
 " Filename: syntax/dictionary.vim
-" Version: 0.0
 " Author: itchyny
 " License: MIT License
 " Last Change: 2014/12/09 08:16:41.
