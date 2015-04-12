@@ -2,7 +2,7 @@
 " Filename: autoload/dictionary.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2015/03/29 01:38:09.
+" Last Change: 2015/04/12 11:39:42.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -359,6 +359,9 @@ function! s:check_exe() abort
   if !executable(s:exe)
     call s:error('The dictionary executable is not created.')
     try
+      if !isdirectory(expand(s:exepath))
+        call mkdir(expand(s:exepath), 'p')
+      endif
       if executable(s:gcc)
         call vimproc#system(printf('%s -o %s %s %s &', s:gcc, s:exe, s:opt, s:mfile))
       endif
