@@ -2,7 +2,7 @@
 " Filename: autoload/dictionary.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2014/12/07 20:21:59.
+" Last Change: 2015/03/29 01:38:09.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -26,7 +26,7 @@ try
 catch
 endtry
 
-function! dictionary#new(args)
+function! dictionary#new(args) abort
   if s:check_mac() | return | endif
   if s:check_exe() | call s:check_vimproc() | return | endif
   if s:check_vimproc() | return | endif
@@ -44,7 +44,7 @@ function! dictionary#new(args)
         \ filetype=dictionary
 endfunction
 
-function! s:search_buffer()
+function! s:search_buffer() abort
   let bufs = filter(tabpagebuflist(), "getbufvar(v:val, '&ft') ==# 'dictionary'")
   if len(bufs)
     return { 'command': bufwinnr(bufs[0]) . 'wincmd w' }
@@ -53,7 +53,7 @@ function! s:search_buffer()
   endif
 endfunction
 
-function! s:parse(args)
+function! s:parse(args) abort
   let args = split(a:args, '\s\+')
   let isnewbuffer = bufname('%') != '' || &l:filetype != '' || &modified
         \ || winheight(0) > 9 * &lines / 10
@@ -106,7 +106,7 @@ let s:noconflict = [
       \ [ '-newtab', '-below' ],
       \ ]
 
-function! dictionary#complete(arglead, cmdline, cursorpos)
+function! dictionary#complete(arglead, cmdline, cursorpos) abort
   try
     let options = copy(s:options)
     if a:arglead != ''
@@ -152,7 +152,7 @@ function! dictionary#complete(arglead, cmdline, cursorpos)
   endtry
 endfunction
 
-function! s:buffername(name)
+function! s:buffername(name) abort
   let buflist = []
   for i in range(tabpagenr('$'))
    call extend(buflist, tabpagebuflist(i + 1))
@@ -165,7 +165,7 @@ function! s:buffername(name)
   return '[' . a:name . (len(bufs) && index ? ' ' . index : '') . ']'
 endfunction
 
-function! s:au()
+function! s:au() abort
   augroup Dictionary
     autocmd CursorMovedI <buffer> call s:update()
     autocmd CursorHoldI <buffer> call s:check()
@@ -174,16 +174,16 @@ function! s:au()
   augroup END
 endfunction
 
-function! s:initdict()
+function! s:initdict() abort
   let b:dictionary = { 'input': '', 'history': [],
         \ 'jump_history': [], 'jump_history_index': 0 }
 endfunction
 
-function! DictionaryComplete(findstart, base)
+function! DictionaryComplete(findstart, base) abort
   return a:findstart ? -1 : []
 endfunction
 
-function! s:update()
+function! s:update() abort
   setlocal completefunc=DictionaryComplete omnifunc=
   let word = getline(1)
   if exists('b:dictionary.proc')
@@ -206,11 +206,11 @@ function! s:update()
   call s:updatetime()
 endfunction
 
-function! s:void()
+function! s:void() abort
   silent call feedkeys(mode() ==# 'i' ? "\<C-g>\<ESC>" : "g\<ESC>", 'n')
 endfunction
 
-function! s:check()
+function! s:check() abort
   try
     if !exists('b:dictionary.proc') || b:dictionary.proc.stdout.eof
       return
@@ -243,14 +243,14 @@ function! s:check()
   endtry
 endfunction
 
-function! s:updatetime()
+function! s:updatetime() abort
   if !exists('s:updatetime')
     let s:updatetime = &updatetime
   endif
   set updatetime=50
 endfunction
 
-function! s:restore()
+function! s:restore() abort
   try
     if exists('s:updatetime')
       let &updatetime = s:updatetime
@@ -260,7 +260,7 @@ function! s:restore()
   endtry
 endfunction
 
-function! s:map()
+function! s:map() abort
   if &l:filetype ==# 'dictionary'
     return
   endif
@@ -281,7 +281,7 @@ function! s:map()
   let &cpo = save_cpo
 endfunction
 
-function! s:with(word)
+function! s:with(word) abort
   call setline(1, a:word)
   call cursor(1, 1)
   startinsert!
@@ -291,7 +291,7 @@ function! s:with(word)
   endif
 endfunction
 
-function! s:jump()
+function! s:jump() abort
   try
     let prev_word = substitute(getline(1), ' $', '', '')
     call insert(b:dictionary.jump_history, prev_word, b:dictionary.jump_history_index)
@@ -303,7 +303,7 @@ function! s:jump()
   endtry
 endfunction
 
-function! s:back()
+function! s:back() abort
   try
     if len(b:dictionary.jump_history) && b:dictionary.jump_history_index
       let b:dictionary.jump_history_index -= max([v:count, 1])
@@ -317,7 +317,7 @@ function! s:back()
   endtry
 endfunction
 
-function! s:cursorword()
+function! s:cursorword() abort
   try
     let curpos = getpos('.')
     let c = curpos[2]
@@ -341,13 +341,13 @@ function! s:cursorword()
   endtry
 endfunction
 
-function! s:error(msg)
+function! s:error(msg) abort
   echohl ErrorMsg
   echomsg 'dictionary.vim: '.a:msg
   echohl None
 endfunction
 
-function! s:check_mac()
+function! s:check_mac() abort
   if !(has('mac') || has('macunix') || has('guimacvim') || system('uname') =~? '^darwin')
     call s:error('Mac is required.')
     return 1
@@ -355,7 +355,7 @@ function! s:check_mac()
   return 0
 endfunction
 
-function! s:check_exe()
+function! s:check_exe() abort
   if !executable(s:exe)
     call s:error('The dictionary executable is not created.')
     try
@@ -372,7 +372,7 @@ function! s:check_exe()
   return 0
 endfunction
 
-function! s:check_vimproc()
+function! s:check_vimproc() abort
   try
     call vimproc#version()
   catch

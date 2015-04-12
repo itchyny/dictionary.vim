@@ -2,7 +2,7 @@
 " Filename: syntax/dictionary.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2014/12/09 08:16:41.
+" Last Change: 2015/03/29 07:23:38.
 " =============================================================================
 
 scriptencoding utf-8
@@ -53,7 +53,7 @@ syntax match DictionaryGrammer '^\(动\|介\|量\|数\|连\)$'
 syntax match DictionaryName '^\S\+\s*\n^\(\(pro\)\?noun\|adjective\|det\|verb\|adverb\|abbreviation\|preposition\|suffix\|prefix\|conjunction\|symb\)\>'
       \ contains=DictionaryGrammer
 syntax match DictionaryName '^\(-\a\|～\|～́\|～̀\|複\).*\|^\a\+\s/\S\+/.*$'
-      \ contains=DictionaryGrammer,DictionaryPronounceNoHead,DictionarySemicolon,DictionaryComment 
+      \ contains=DictionaryGrammer,DictionaryPronounceNoHead,DictionarySemicolon,DictionaryComment
 syntax match DictionaryComment '^\(DERIVATIVES\|ORIGIN\|PHRASES\)\|｟.\{-}｠\|〖.\{-}〗\|〘.\{-}〙'
 syntax match DictionarySemicolon ';'
 
