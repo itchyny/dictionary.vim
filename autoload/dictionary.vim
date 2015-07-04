@@ -2,7 +2,7 @@
 " Filename: autoload/dictionary.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2015/04/12 11:39:42.
+" Last Change: 2015/06/06 16:34:48.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -207,7 +207,7 @@ function! s:update() abort
 endfunction
 
 function! s:void() abort
-  silent call feedkeys(mode() ==# 'i' ? "\<C-g>\<ESC>" : "g\<ESC>", 'n')
+  silent call feedkeys(mode() ==# 'i' ? "\<C-g>\<ESC>" : "g\<ESC>" . (v:count ? v:count : ''), 'n')
 endfunction
 
 function! s:check() abort
