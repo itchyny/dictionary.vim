@@ -2,7 +2,7 @@
 " Filename: autoload/dictionary.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2016/02/17 23:50:20.
+" Last Change: 2016/02/17 23:55:53.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -55,7 +55,7 @@ endfunction
 
 function! s:parse(args) abort
   let args = split(a:args, '\s\+')
-  let isnewbuffer = bufname('%') != '' || &l:filetype != '' || &modified
+  let isnewbuffer = bufname('%') !=# '' || &l:filetype !=# '' || &modified
         \ || winheight(0) > 9 * &lines / 10
   let name = " `=s:buffername('dictionary')`"
   let command = 'new'
@@ -78,7 +78,7 @@ function! s:parse(args) abort
       let command = 'tabnew'
       let isnewbuffer = 1
     elseif arg =~? '^-*below$'
-      if command == 'tabnew'
+      if command ==# 'tabnew'
         let command = 'new'
       endif
       let below = 'below '
@@ -109,7 +109,7 @@ let s:noconflict = [
 function! dictionary#complete(arglead, cmdline, ...) abort
   try
     let options = copy(s:options)
-    if a:arglead != ''
+    if a:arglead !=# ''
       let options = sort(filter(copy(s:options), 'stridx(v:val, a:arglead) != -1'))
       if len(options) == 0
         let arglead = substitute(a:arglead, '^-\+', '', '')
