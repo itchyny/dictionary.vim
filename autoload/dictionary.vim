@@ -2,7 +2,7 @@
 " Filename: autoload/dictionary.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2015/06/06 16:34:48.
+" Last Change: 2016/02/05 08:41:48.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -106,7 +106,7 @@ let s:noconflict = [
       \ [ '-newtab', '-below' ],
       \ ]
 
-function! dictionary#complete(arglead, cmdline, cursorpos) abort
+function! dictionary#complete(arglead, cmdline, ...) abort
   try
     let options = copy(s:options)
     if a:arglead != ''
@@ -179,7 +179,7 @@ function! s:initdict() abort
         \ 'jump_history': [], 'jump_history_index': 0 }
 endfunction
 
-function! DictionaryComplete(findstart, base) abort
+function! DictionaryComplete(findstart, ...) abort
   return a:findstart ? -1 : []
 endfunction
 
