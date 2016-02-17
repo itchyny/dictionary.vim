@@ -2,7 +2,7 @@
 " Filename: autoload/dictionary.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2016/02/05 08:41:48.
+" Last Change: 2016/02/17 23:50:20.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -348,7 +348,7 @@ function! s:error(msg) abort
 endfunction
 
 function! s:check_mac() abort
-  if !(has('mac') || has('macunix') || has('guimacvim') || system('uname') =~? '^darwin')
+  if !(has('mac') || has('macunix') || has('gui_mac') || system('uname') =~? '^darwin')
     call s:error('Mac is required.')
     return 1
   endif
