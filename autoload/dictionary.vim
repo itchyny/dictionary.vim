@@ -2,7 +2,7 @@
 " Filename: autoload/dictionary.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2016/02/17 23:55:53.
+" Last Change: 2017/04/17 00:51:48.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -193,6 +193,9 @@ function! s:update() abort
       call b:dictionary.proc.waitpid()
     catch
     endtry
+  endif
+  if get(get(b:, 'dictionary', {}), 'input', '') ==# substitute(word, ' $', '', '')
+    return
   endif
   try
     let b:dictionary.proc = vimproc#pgroup_open(printf('%s "%s"', s:exe, word))
