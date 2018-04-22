@@ -2,7 +2,7 @@
 " Filename: autoload/dictionary.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2017/04/17 00:51:48.
+" Last Change: 2018/04/22 21:07:06.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -25,6 +25,7 @@ try
   endif
 catch
 endtry
+let s:use_timer = has('timers') && (v:version >= 800 || has('nvim'))
 
 function! dictionary#new(args) abort
   if s:check_mac() | return | endif
@@ -168,9 +169,13 @@ endfunction
 function! s:au() abort
   augroup Dictionary
     autocmd CursorMovedI <buffer> call s:update()
-    autocmd CursorHoldI <buffer> call s:check()
-    autocmd BufLeave <buffer> call s:restore()
-    autocmd BufEnter <buffer> call s:updatetime()
+    if s:use_timer
+      autocmd CursorHoldI <buffer> call s:check()
+    else
+      autocmd CursorHoldI <buffer> call s:check()
+      autocmd BufEnter <buffer> call s:updatetime()
+      autocmd BufLeave <buffer> call s:restore()
+    endif
   augroup END
 endfunction
 
@@ -206,11 +211,23 @@ function! s:update() abort
       call s:initdict()
     endif
   endtry
-  call s:updatetime()
+  if !s:use_timer
+    call s:updatetime()
+  endif
+endfunction
+
+function! s:timer_callback(timer) abort
+  if has_key(b:, 'dictionary')
+    call s:check()
+  endif
 endfunction
 
 function! s:void() abort
-  silent call feedkeys(mode() ==# 'i' ? "\<C-g>\<ESC>" : "g\<ESC>" . (v:count ? v:count : ''), 'n')
+  if s:use_timer
+    call timer_start(200, function('s:timer_callback'))
+  else
+    silent! call feedkeys(mode() ==# 'i' ? "\<C-g>\<ESC>" : "g\<ESC>" . (v:count ? v:count : ''), 'n')
+  endif
 endfunction
 
 function! s:check() abort
