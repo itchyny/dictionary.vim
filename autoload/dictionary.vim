@@ -2,7 +2,7 @@
 " Filename: autoload/dictionary.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2018/04/22 21:07:06.
+" Last Change: 2018/04/22 21:47:06.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -25,7 +25,6 @@ try
   endif
 catch
 endtry
-let s:use_timer = has('timers') && (v:version >= 800 || has('nvim'))
 
 function! dictionary#new(args) abort
   if s:check_mac() | return | endif
@@ -36,13 +35,15 @@ function! dictionary#new(args) abort
   call setline(1, join(words, ' '))
   call cursor(1, 1)
   startinsert!
-  call s:au()
-  call s:map()
-  call s:initdict()
+  call s:autocmd()
+  call s:mapping()
+  let b:dictionary = { 'input': '', 'history': [],
+        \ 'jump_history': [], 'jump_history_index': 0,
+        \ 'procs': {} }
   setlocal buftype=nofile noswapfile
         \ bufhidden=hide nobuflisted nofoldenable foldcolumn=0
         \ nolist wrap completefunc=DictionaryComplete omnifunc=
-        \ filetype=dictionary
+        \ filetype=dictionary completefunc=DictionaryComplete omnifunc=
 endfunction
 
 function! s:search_buffer() abort
@@ -166,22 +167,11 @@ function! s:buffername(name) abort
   return '[' . a:name . (len(bufs) && index ? ' ' . index : '') . ']'
 endfunction
 
-function! s:au() abort
+function! s:autocmd() abort
   augroup Dictionary
     autocmd CursorMovedI <buffer> call s:update()
-    if s:use_timer
-      autocmd CursorHoldI <buffer> call s:check()
-    else
-      autocmd CursorHoldI <buffer> call s:check()
-      autocmd BufEnter <buffer> call s:updatetime()
-      autocmd BufLeave <buffer> call s:restore()
-    endif
+    autocmd CursorHoldI <buffer> call s:check()
   augroup END
-endfunction
-
-function! s:initdict() abort
-  let b:dictionary = { 'input': '', 'history': [],
-        \ 'jump_history': [], 'jump_history_index': 0 }
 endfunction
 
 function! DictionaryComplete(findstart, ...) abort
@@ -189,31 +179,14 @@ function! DictionaryComplete(findstart, ...) abort
 endfunction
 
 function! s:update() abort
-  setlocal completefunc=DictionaryComplete omnifunc=
-  let word = getline(1)
-  if exists('b:dictionary.proc')
-    call s:check()
-    try
-      call b:dictionary.proc.kill(15)
-      call b:dictionary.proc.waitpid()
-    catch
-    endtry
-  endif
-  if get(get(b:, 'dictionary', {}), 'input', '') ==# substitute(word, ' $', '', '')
+  let word = s:get_word()
+  if b:dictionary.input ==# word
     return
   endif
-  try
-    let b:dictionary.proc = vimproc#pgroup_open(printf('%s "%s"', s:exe, word))
-    call b:dictionary.proc.stdin.close()
-    call b:dictionary.proc.stderr.close()
-  catch
-    if !exists('b:dictionary')
-      call s:initdict()
-    endif
-  endtry
-  if !s:use_timer
-    call s:updatetime()
-  endif
+  let proc = vimproc#pgroup_open(printf('%s "%s"', s:exe, word))
+  call proc.stdin.close()
+  call proc.stderr.close()
+  let b:dictionary.procs[word] = proc
 endfunction
 
 function! s:timer_callback(timer) abort
@@ -222,25 +195,25 @@ function! s:timer_callback(timer) abort
   endif
 endfunction
 
-function! s:void() abort
-  if s:use_timer
-    call timer_start(200, function('s:timer_callback'))
-  else
-    silent! call feedkeys(mode() ==# 'i' ? "\<C-g>\<ESC>" : "g\<ESC>" . (v:count ? v:count : ''), 'n')
-  endif
-endfunction
-
 function! s:check() abort
   try
-    if !exists('b:dictionary.proc') || b:dictionary.proc.stdout.eof
+    let newword = s:get_word()
+    if !has_key(b:dictionary.procs, newword)
       return
     endif
-    let result = split(b:dictionary.proc.stdout.read(), "\n")
-    let word = getline(1)
-    let newword = substitute(word, ' $', '', '')
-    if len(result) == 0 && b:dictionary.input ==# newword && newword !=# ''
-      call s:void()
+    let proc = b:dictionary.procs[newword]
+    if proc.stdout.eof
       return
+    endif
+    let result = split(proc.stdout.read(), "\n")
+    let word = getline(1)
+    if len(result) == 0 && b:dictionary.input ==# newword && newword !=# ''
+      call timer_start(200, function('s:timer_callback'))
+      return
+    endif
+    if has_key(b:dictionary.procs, get(b:dictionary, 'input', ''))
+      call b:dictionary.procs[b:dictionary.input].kill(15)
+      call b:dictionary.procs[b:dictionary.input].waitpid()
     endif
     let b:dictionary.input = newword
     let curpos = getpos('.')
@@ -248,12 +221,11 @@ function! s:check() abort
     call setline(1, word)
     call setline(2, result)
     try
-      call b:dictionary.proc.stdout.close()
-      call b:dictionary.proc.stderr.close()
-      call b:dictionary.proc.waitpid()
+      call proc.stdout.close()
+      call proc.stderr.close()
+      call proc.waitpid()
     catch
     endtry
-    unlet b:dictionary.proc
     call cursor(1, 1)
     startinsert!
     if curpos[1] == 1
@@ -263,24 +235,11 @@ function! s:check() abort
   endtry
 endfunction
 
-function! s:updatetime() abort
-  if !exists('s:updatetime')
-    let s:updatetime = &updatetime
-  endif
-  set updatetime=50
+function! s:get_word() abort
+  return substitute(getline(1), ' *$', '', '')
 endfunction
 
-function! s:restore() abort
-  try
-    if exists('s:updatetime')
-      let &updatetime = s:updatetime
-    endif
-    unlet s:updatetime
-  catch
-  endtry
-endfunction
-
-function! s:map() abort
+function! s:mapping() abort
   if &l:filetype ==# 'dictionary'
     return
   endif
@@ -313,7 +272,7 @@ endfunction
 
 function! s:jump() abort
   try
-    let prev_word = substitute(getline(1), ' $', '', '')
+    let prev_word = s:get_word()
     call insert(b:dictionary.jump_history, prev_word, b:dictionary.jump_history_index)
     let b:dictionary.jump_history_index += 1
     let word = s:cursorword()
