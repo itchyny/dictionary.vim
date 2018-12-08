@@ -2,7 +2,7 @@
 " Filename: autoload/dictionary.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2018/04/22 21:47:06.
+" Last Change: 2018/12/08 14:38:47.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -20,7 +20,7 @@ let s:opt = get(g:, 'dictionary_compile_option', s:optdefault)
 try
   if !executable(s:exe) || getftime(s:exe) < getftime(s:mfile)
     if executable(s:gcc)
-      call vimproc#system(printf('%s -o %s %s %s &', s:gcc, s:exe, s:opt, s:mfile))
+      call system(printf('%s -o %s %s %s &', s:gcc, s:exe, s:opt, s:mfile))
     endif
   endif
 catch
@@ -28,8 +28,7 @@ endtry
 
 function! dictionary#new(args) abort
   if s:check_mac() | return | endif
-  if s:check_exe() | call s:check_vimproc() | return | endif
-  if s:check_vimproc() | return | endif
+  if s:check_exe() | return | endif
   let [isnewbuffer, command, words] = s:parse(a:args)
   try | silent execute command | catch | return | endtry
   call setline(1, join(words, ' '))
@@ -37,9 +36,13 @@ function! dictionary#new(args) abort
   startinsert!
   call s:autocmd()
   call s:mapping()
-  let b:dictionary = { 'input': '', 'history': [],
-        \ 'jump_history': [], 'jump_history_index': 0,
-        \ 'procs': {} }
+  let b:dictionary = {
+        \ 'input': '',
+        \ 'jump_history': [],
+        \ 'jump_history_index': 0,
+        \ 'latest_channel_id': -1,
+        \ 'current_channel_id': -1,
+        \ }
   setlocal buftype=nofile noswapfile
         \ bufhidden=hide nobuflisted nofoldenable foldcolumn=0
         \ nolist wrap completefunc=DictionaryComplete omnifunc=
@@ -170,7 +173,6 @@ endfunction
 function! s:autocmd() abort
   augroup Dictionary
     autocmd CursorMovedI <buffer> call s:update()
-    autocmd CursorHoldI <buffer> call s:check()
   augroup END
 endfunction
 
@@ -183,56 +185,41 @@ function! s:update() abort
   if b:dictionary.input ==# word
     return
   endif
-  let proc = vimproc#pgroup_open(printf('%s "%s"', s:exe, word))
-  call proc.stdin.close()
-  call proc.stderr.close()
-  let b:dictionary.procs[word] = proc
+  let b:dictionary.latest_channel_id = ch_info(job_getchannel(job_start(
+        \ printf('%s "%s" </dev/null', s:exe, word),
+        \ { 'callback': function('s:stdout'),
+        \   'exit_cb': function('s:exit') }))).id
 endfunction
 
-function! s:timer_callback(timer) abort
-  if has_key(b:, 'dictionary')
-    call s:check()
+function! s:stdout(ch, msg)
+  let curpos = getpos('.')
+  let channel_id = ch_info(a:ch).id
+  if b:dictionary.current_channel_id != channel_id
+    if b:dictionary.latest_channel_id == b:dictionary.current_channel_id
+      return
+    else
+      let b:dictionary.current_channel_id = channel_id
+      let word = getline(1)
+      silent % delete _
+      call setline(1, word)
+    endif
+  endif
+  let b:dictionary.input = s:get_word()
+  call setline(line('$') + 1, split(a:msg, "\n"))
+  call cursor(1, 1)
+  startinsert!
+  if curpos[1] == 1
+    call setpos('.', curpos)
   endif
 endfunction
 
-function! s:check() abort
-  try
-    let newword = s:get_word()
-    if !has_key(b:dictionary.procs, newword)
-      return
-    endif
-    let proc = b:dictionary.procs[newword]
-    if proc.stdout.eof
-      return
-    endif
-    let result = split(proc.stdout.read(), "\n")
-    let word = getline(1)
-    if len(result) == 0 && b:dictionary.input ==# newword && newword !=# ''
-      call timer_start(200, function('s:timer_callback'))
-      return
-    endif
-    if has_key(b:dictionary.procs, get(b:dictionary, 'input', ''))
-      call b:dictionary.procs[b:dictionary.input].kill(15)
-      call b:dictionary.procs[b:dictionary.input].waitpid()
-    endif
-    let b:dictionary.input = newword
-    let curpos = getpos('.')
+function! s:exit(job, status) abort
+  if s:get_word() ==# ''
+    let b:dictionary.input = ''
+    let b:dictionary.current_channel_id = -1
+    let b:dictionary.latest_channel_id = -1
     silent % delete _
-    call setline(1, word)
-    call setline(2, result)
-    try
-      call proc.stdout.close()
-      call proc.stderr.close()
-      call proc.waitpid()
-    catch
-    endtry
-    call cursor(1, 1)
-    startinsert!
-    if curpos[1] == 1
-      call setpos('.', curpos)
-    endif
-  catch
-  endtry
+  endif
 endfunction
 
 function! s:get_word() abort
@@ -342,7 +329,7 @@ function! s:check_exe() abort
         call mkdir(expand(s:exepath), 'p')
       endif
       if executable(s:gcc)
-        call vimproc#system(printf('%s -o %s %s %s &', s:gcc, s:exe, s:opt, s:mfile))
+        call system(printf('%s -o %s %s %s &', s:gcc, s:exe, s:opt, s:mfile))
       endif
     catch
     endtry
@@ -351,16 +338,6 @@ function! s:check_exe() abort
     endif
     return 1
   endif
-  return 0
-endfunction
-
-function! s:check_vimproc() abort
-  try
-    call vimproc#version()
-  catch
-    call s:error('vimproc is not found.')
-    return 1
-  endtry
   return 0
 endfunction
 

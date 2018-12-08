@@ -11,7 +11,6 @@
 ## Requirement
 + Dictionary.app
 + `gcc` or `llvm-gcc`
-+ vimproc (https://github.com/Shougo/vimproc.vim)
 
 ## Installation
 Install with your favorite plugin manager.
