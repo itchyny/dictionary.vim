@@ -2,7 +2,7 @@
 " Filename: autoload/dictionary.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2018/12/08 14:38:47.
+" Last Change: 2018/12/21 17:00:06.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -192,6 +192,9 @@ function! s:update() abort
 endfunction
 
 function! s:stdout(ch, msg)
+  if !has_key(b:, 'dictionary')
+    return
+  endif
   let curpos = getpos('.')
   let channel_id = ch_info(a:ch).id
   if b:dictionary.current_channel_id != channel_id
@@ -214,6 +217,9 @@ function! s:stdout(ch, msg)
 endfunction
 
 function! s:exit(job, status) abort
+  if !has_key(b:, 'dictionary')
+    return
+  endif
   if s:get_word() ==# ''
     let b:dictionary.input = ''
     let b:dictionary.current_channel_id = -1
