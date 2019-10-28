@@ -2,7 +2,7 @@
 " Filename: autoload/dictionary.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2018/12/21 17:00:06.
+" Last Change: 2019/10/28 15:56:00.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -187,7 +187,7 @@ function! s:update() abort
   endif
   let b:dictionary.latest_channel_id = ch_info(job_getchannel(job_start(
         \ printf('%s "%s" </dev/null', s:exe, word),
-        \ { 'callback': function('s:stdout'),
+        \ { 'out_cb': function('s:stdout'),
         \   'exit_cb': function('s:exit') }))).id
 endfunction
 
